@@ -24,6 +24,8 @@
 		5028AC3E2099EA11006CA67E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5028AC412099EA11006CA67E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5028AC432099EA11006CA67E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		504B2252209C337F00440BFE /* ThirstySoftRegular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ThirstySoftRegular.otf; sourceTree = "<group>"; };
+		504B2253209C338700440BFE /* Delm-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Delm-Medium.otf"; sourceTree = "<group>"; };
 		50D511C22099F1350086F8A4 /* PhotosView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PhotosView.xib; sourceTree = "<group>"; };
 		50D511C42099F1B30086F8A4 /* PhotosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -96,6 +98,8 @@
 		5037E253209B63C3009108B3 /* Ressources */ = {
 			isa = PBXGroup;
 			children = (
+				504B2252209C337F00440BFE /* ThirstySoftRegular.otf */,
+				504B2253209C338700440BFE /* Delm-Medium.otf */,
 				5028AC402099EA11006CA67E /* LaunchScreen.storyboard */,
 				5028AC3E2099EA11006CA67E /* Assets.xcassets */,
 			);
