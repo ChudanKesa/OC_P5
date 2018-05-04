@@ -8,16 +8,23 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class HomeViewController: UIViewController {
+    
+    // MARK: - Properties
+    
+    // MARK: - Outlets & actions
+    
+    // MARK: - View life cycle
+    
+    // MARK: - Notifications
+    
+    // MARK: - UIImagePickerControllerDelegate
+    
+    // MARK: - Configuration
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
 
