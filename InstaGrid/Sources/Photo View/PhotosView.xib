@@ -9,14 +9,28 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PhotosView" customModule="InstaGrid" customModuleProvider="target">
+            <connections>
+                <outlet property="leftButton" destination="U7w-D6-UMh" id="K5P-EJ-fyx"/>
+                <outlet property="leftButtonView" destination="ycf-u9-euU" id="gXU-Ew-eRT"/>
+                <outlet property="photosView" destination="iN0-l3-epB" id="seO-YL-rnm"/>
+                <outlet property="rectangle" destination="edY-eU-3Qb" id="O2a-Qs-Lo7"/>
+                <outlet property="rectangleView" destination="TUB-eS-ebA" id="Zq6-lW-FLY"/>
+                <outlet property="rightButton" destination="Xw2-Pt-ooo" id="7MY-Ks-8G6"/>
+                <outlet property="rightButtonView" destination="0Dv-5D-Naq" id="1xh-Au-ZaA"/>
+                <outlet property="topLeftButton" destination="6Lc-BM-gx6" id="zkB-Ys-INS"/>
+                <outlet property="topLeftButtonView" destination="pCd-6Z-uFw" id="p9f-R7-hdo"/>
+                <outlet property="topRightButton" destination="imB-ZF-KvQ" id="aj3-2Z-oF9"/>
+                <outlet property="topRightButtonView" destination="958-aM-Zyi" id="6pq-Q0-bpJ"/>
+            </connections>
+        </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="PhotosView" customModule="InstaGrid" customModuleProvider="target">
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
             <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="edY-eU-3Qb" userLabel="Rectangle">
-                    <rect key="frame" x="14" y="160" width="270" height="127"/>
+                    <rect key="frame" x="17" y="160" width="270" height="127"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="75"/>
@@ -24,11 +38,11 @@
                         <color key="titleColor" red="0.32364630700000002" green="0.56466770170000002" blue="0.73641794920000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <connections>
-                        <action selector="rectangleButtonTouched:" destination="iN0-l3-epB" eventType="touchUpInside" id="Ebp-Gh-S9a"/>
+                        <action selector="rectangleButtonTouched:" destination="-1" eventType="touchUpInside" id="Ymd-xB-LHG"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U7w-D6-UMh" userLabel="LeftButton">
-                    <rect key="frame" x="17" y="15" width="127" height="127"/>
+                    <rect key="frame" x="17" y="17" width="127" height="127"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="75"/>
@@ -36,11 +50,11 @@
                         <color key="titleColor" red="0.32364630700000002" green="0.56466770170000002" blue="0.73641794920000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <connections>
-                        <action selector="leftButtonTouched:" destination="iN0-l3-epB" eventType="touchUpInside" id="AQa-Av-Ldi"/>
+                        <action selector="leftButtonTouched:" destination="-1" eventType="touchUpInside" id="eDI-1D-vdP"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Lc-BM-gx6" userLabel="TopLeftButton">
-                    <rect key="frame" x="26" y="30" width="127" height="127"/>
+                    <rect key="frame" x="17" y="17" width="127" height="127"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="75"/>
@@ -48,11 +62,11 @@
                         <color key="titleColor" red="0.32364630700000002" green="0.56466770170000002" blue="0.73641794920000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <connections>
-                        <action selector="topLeftButtonTouched:" destination="iN0-l3-epB" eventType="touchUpInside" id="ccJ-VY-99e"/>
+                        <action selector="topLeftButtonTouched:" destination="-1" eventType="touchUpInside" id="Tf3-IT-24A"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xw2-Pt-ooo" userLabel="RightButton">
-                    <rect key="frame" x="159" y="15" width="127" height="127"/>
+                    <rect key="frame" x="158" y="17" width="127" height="127"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="75"/>
@@ -60,11 +74,11 @@
                         <color key="titleColor" red="0.32364630700000002" green="0.56466770170000002" blue="0.73641794920000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <connections>
-                        <action selector="rightButtonTouched:" destination="iN0-l3-epB" eventType="touchUpInside" id="Vgd-rL-sRk"/>
+                        <action selector="rightButtonTouched:" destination="-1" eventType="touchUpInside" id="fre-B8-oK2"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="imB-ZF-KvQ" userLabel="TopRightButton">
-                    <rect key="frame" x="169" y="30" width="127" height="127"/>
+                    <rect key="frame" x="158" y="17" width="127" height="127"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="75"/>
@@ -72,7 +86,7 @@
                         <color key="titleColor" red="0.32364630700000002" green="0.56466770170000002" blue="0.73641794920000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <connections>
-                        <action selector="topRightButtonTouched:" destination="iN0-l3-epB" eventType="touchUpInside" id="LNm-Wt-q6t"/>
+                        <action selector="topRightButtonTouched:" destination="-1" eventType="touchUpInside" id="Xkq-1e-HLf"/>
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pCd-6Z-uFw" userLabel="TopLeftButtonView" customClass="UIImageView">
@@ -102,20 +116,10 @@
                 </view>
             </subviews>
             <color key="backgroundColor" red="0.1046529487" green="0.39479339120000001" blue="0.61304932830000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="tintColor" red="0.1046529487" green="0.39479339120000001" blue="0.61304932830000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <connections>
-                <outlet property="leftButton" destination="U7w-D6-UMh" id="b4X-Rs-SrX"/>
-                <outlet property="leftButtonView" destination="ycf-u9-euU" id="6DI-Mh-RS7"/>
-                <outlet property="rectangle" destination="edY-eU-3Qb" id="Hes-f2-EM5"/>
-                <outlet property="rectangleView" destination="TUB-eS-ebA" id="xcq-7L-nuT"/>
-                <outlet property="rightButton" destination="Xw2-Pt-ooo" id="cq4-Gt-zIj"/>
-                <outlet property="rightButtonView" destination="0Dv-5D-Naq" id="NNp-hQ-IZM"/>
-                <outlet property="topLeftButton" destination="6Lc-BM-gx6" id="1gQ-n4-73A"/>
-                <outlet property="topLeftButtonView" destination="pCd-6Z-uFw" id="7I9-DZ-9fZ"/>
-                <outlet property="topRightButton" destination="imB-ZF-KvQ" id="cLz-ht-OKG"/>
-                <outlet property="topRightButtonView" destination="958-aM-Zyi" id="O7J-TW-OP3"/>
-            </connections>
+            <point key="canvasLocation" x="46" y="42"/>
         </view>
     </objects>
 </document>

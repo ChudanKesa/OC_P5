@@ -15,6 +15,8 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     lazy var currentDeviceOrientation = UIDeviceOrientation.unknown
     
+    lazy var panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(moveView(gesture:)))
+    
     lazy var picker: UIImagePickerController = {
         var picker = UIImagePickerController()
         picker.mediaTypes = [kUTTypeImage as String]
@@ -54,6 +56,9 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     lazy var orientation = direction.undefined
     lazy var currentLayout = PhotosView.layout.first
+    
+    lazy var viewOriginX = photosView.frame.origin.x
+    lazy var viewOriginY = photosView.frame.origin.y
 
     
     // MARK: - Outlets & actions
@@ -68,11 +73,22 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBOutlet weak var firstLayoutButton: UIButton!
     
     
-    @IBAction func rightButtonTouched(_ sender: UIButton) {
-    }
-    @IBAction func centerButtonTouched(_ sender: UIButton) {
-    }
     @IBAction func leftButtonTouched(_ sender: UIButton) {
+        photosView.changeLayout(from: currentLayout, to: .first, animated: true)
+        currentLayout = .first
+        selectedSign.frame = firstLayoutButton.frame
+    }
+    
+    @IBAction func centerButtonTouched(_ sender: UIButton) {
+        photosView.changeLayout(from: currentLayout, to: .second, animated: true)
+        currentLayout = .second
+        selectedSign.frame = secondLayoutButton.frame
+    }
+
+    @IBAction func rightButtonTouched(_ sender: UIButton) {
+        photosView.changeLayout(from: currentLayout, to: .third, animated: true)
+        currentLayout = .third
+        selectedSign.frame = thirdLayoutButton.frame
     }
     
     // MARK: - View life cycle
@@ -80,12 +96,22 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        photosView.addGestureRecognizer(panGestureRecognizer)
+        
+        picker.delegate = self
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(putPictureInRectangle), name: rectangleNotificationName, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(putPictureInRightButton), name: rightButtonNotificationName, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(putPictureInLeftButton), name: leftButtonNotificationName, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(putPictureInTopRightButton), name: topRightButtonNotificationName, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(putPictureInTopLeftButton), name: topLeftButtonNotificationName, object: nil)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotate(notification:)), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
     }
     
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         setFontSize(of: instagridTitle)
         setFontSize(of: instructionText)
         
@@ -97,20 +123,21 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         }
         if !alreadySet { setButtonsViews() }
         
+        adaptPhotosViewElementsToItsSize()
     }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-        
     }
+    
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
         scaleViews()
     }
+    
     
     
     // MARK: - Notifications
@@ -146,6 +173,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         choosePicture()
     }
     
+    // Sends notification that the phone rotated, and changes the swipe instruction text.
     @objc
     func deviceDidRotate(notification: Notification) {
         self.currentDeviceOrientation = UIDevice.current.orientation
@@ -197,6 +225,117 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         present(picker, animated: true, completion: nil)
     }
     
+    // MARK: - Gesture
+    
+    @objc
+    func moveView(gesture: UIPanGestureRecognizer) {
+        var translationX = CGFloat()
+        var translationY = CGFloat()
+        let movement = gesture.translation(in: photosView)
+        
+        
+        switch gesture.state {
+        case .began, .changed:
+            if abs(movement.x) < 25 && abs(movement.y) < 25 && orientation == .undefined {
+                translationY = movement.y
+                translationX = movement.x
+                
+                photosView.transform = CGAffineTransform(translationX: translationX, y: translationY)
+            } else {
+                if abs(movement.x) > abs(movement.y) && orientation == .undefined  { orientation = .horizontal }
+                if abs(movement.y) > abs(movement.x) && orientation == .undefined  { orientation = .vertical }
+                if orientation == .vertical {
+                    translationX = 0
+                    translationY = movement.y
+                }
+                if orientation == .horizontal {
+                    translationY = 0
+                    translationX = movement.x
+                }
+                
+                if isPortrait {
+                    if photosView.frame.origin.y < (viewOriginY-50) {
+                        photosView.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+                    } else {
+                        photosView.backgroundColor = #colorLiteral(red: 0.1046529487, green: 0.3947933912, blue: 0.6130493283, alpha: 1)
+                    }
+                } else if isLandscape {
+                    if photosView.frame.origin.x < (viewOriginX-50) {
+                        photosView.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+                    } else {
+                        photosView.backgroundColor = #colorLiteral(red: 0.1046529487, green: 0.3947933912, blue: 0.6130493283, alpha: 1)
+                    }
+                }
+                
+                UIView.animate(withDuration: 0.2, animations: {
+                    self.photosView.transform = CGAffineTransform(translationX: translationX, y: translationY)
+                }
+                )
+            }
+            
+        case .ended, .cancelled:
+            if isPortrait {
+                if movement.y < -50 {
+                    UIView.animateKeyframes(withDuration: 1.0, delay: 0, options: [], animations: {
+                        UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.4, animations: {
+                            self.photosView.transform = CGAffineTransform(translationX: 0, y: -self.view.frame.height)
+                        })
+                        UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.1, animations: {
+                            self.photosView.alpha = 0
+                            self.photosView.transform = .identity
+                            self.photosView.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+                        })
+                        UIView.addKeyframe(withRelativeStartTime: 0.6, relativeDuration: 0.01, animations: {
+                            self.photosView.alpha = 1
+                        })
+                        UIView.addKeyframe(withRelativeStartTime: 0.6, relativeDuration: 0.4, animations: {
+                            self.photosView.transform = .identity
+                        })
+                    }, completion: nil)
+                    share()
+                } else {
+                    UIView.animate(withDuration: 0.3, animations: {self.photosView.transform = .identity})
+                }
+            } else if isLandscape {
+                if movement.x < -50 {
+                    UIView.animateKeyframes(withDuration: 1.0, delay: 0, options: [], animations: {
+                        UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.4, animations: {
+                            self.photosView.transform = CGAffineTransform(translationX: -self.view.frame.width, y: 0)
+                        })
+                        UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.1, animations: {
+                            self.photosView.alpha = 0
+                            self.photosView.transform = .identity
+                            self.photosView.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+                        })
+                        UIView.addKeyframe(withRelativeStartTime: 0.6, relativeDuration: 0.01, animations: {
+                            self.photosView.alpha = 1
+                        })
+                        UIView.addKeyframe(withRelativeStartTime: 0.6, relativeDuration: 0.4, animations: {
+                            self.photosView.transform = .identity
+                        })
+                    }, completion: nil)
+                    share()
+                } else {
+                    UIView.animate(withDuration: 0.3, animations: {self.photosView.transform = .identity})
+                }
+            }
+            orientation = .undefined
+        default:
+            break
+        }
+    }
+    
+    
+    private func share() {
+        photosView.backgroundColor = #colorLiteral(red: 0.7005076142, green: 0.7005076142, blue: 0.7005076142, alpha: 0.4212328767)
+        guard let viewToShare = photosView.toUIImage() else {
+            return
+        }
+        
+        let vc = UIActivityViewController(activityItems: [viewToShare], applicationActivities: [])
+        present(vc, animated: true)
+    }
+    
     // MARK: - Configuration
 
     // Reccords views sizes according to screen size
@@ -233,51 +372,6 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         }
     }
     
-    private func setButtonsViews() {
-        
-        self.view.addSubview(firstLayoutButtonView)
-        self.view.addSubview(secondLayoutButtonView)
-        self.view.addSubview(thirdLayoutButtonView)
-        
-        self.view.addSubview(selectedSign)
-        selectedSign.frame = firstLayoutButton.frame
-        selectedSign.contentMode = .scaleAspectFill
-        selectedSign.layer.masksToBounds = true
-        selectedSign.clipsToBounds = true
-        selectedSign.image = UIImage(named: "Selected")
-        selectedSign.isUserInteractionEnabled = false
-        selectedSign.layer.zPosition = 2
-        
-        firstLayoutButtonView.frame = firstLayoutButton.frame
-        secondLayoutButtonView.frame = secondLayoutButton.frame
-        thirdLayoutButtonView.frame = thirdLayoutButton.frame
-        
-        
-        photosView.setButtonStyle(button: firstLayoutButton, style: photosView.invisibleStyle)
-        photosView.setButtonStyle(button: secondLayoutButton, style: photosView.invisibleStyle)
-        photosView.setButtonStyle(button: thirdLayoutButton, style: photosView.invisibleStyle)
-        
-        firstLayoutButtonView.contentMode = .scaleAspectFill
-        firstLayoutButtonView.layer.masksToBounds = true
-        firstLayoutButtonView.clipsToBounds = true
-        firstLayoutButtonView.image = UIImage(named: "Layout 1")
-        firstLayoutButtonView.isUserInteractionEnabled = false
-        firstLayoutButtonView.layer.zPosition = 1
-        
-        secondLayoutButtonView.contentMode = .scaleAspectFill
-        secondLayoutButtonView.layer.masksToBounds = true
-        secondLayoutButtonView.clipsToBounds = true
-        secondLayoutButtonView.image = UIImage(named: "Layout 2")
-        secondLayoutButtonView.isUserInteractionEnabled = false
-        secondLayoutButtonView.layer.zPosition = 1
-        
-        thirdLayoutButtonView.contentMode = .scaleAspectFill
-        thirdLayoutButtonView.layer.masksToBounds = true
-        thirdLayoutButtonView.clipsToBounds = true
-        thirdLayoutButtonView.image = UIImage(named: "Layout 3")
-        thirdLayoutButtonView.isUserInteractionEnabled = false
-        thirdLayoutButtonView.layer.zPosition = 1
-    }
     
     // Sets views sizes to reccorded values
     private func setSizes() {
@@ -334,6 +428,54 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     
+    // Makes the layout button invisible (so they can look however we want in the IB) and puts the layout images in views on top of them. Adds the views to hierarchy, so is only to be called once.
+    private func setButtonsViews() {
+        
+        self.view.addSubview(firstLayoutButtonView)
+        self.view.addSubview(secondLayoutButtonView)
+        self.view.addSubview(thirdLayoutButtonView)
+        
+        self.view.addSubview(selectedSign)
+        selectedSign.frame = firstLayoutButton.frame
+        selectedSign.contentMode = .scaleAspectFill
+        selectedSign.layer.masksToBounds = true
+        selectedSign.clipsToBounds = true
+        selectedSign.image = UIImage(named: "Selected")
+        selectedSign.isUserInteractionEnabled = false
+        selectedSign.layer.zPosition = 2
+        
+        firstLayoutButtonView.frame = firstLayoutButton.frame
+        secondLayoutButtonView.frame = secondLayoutButton.frame
+        thirdLayoutButtonView.frame = thirdLayoutButton.frame
+        
+        
+        photosView.setButtonStyle(button: firstLayoutButton, style: photosView.invisibleStyle)
+        photosView.setButtonStyle(button: secondLayoutButton, style: photosView.invisibleStyle)
+        photosView.setButtonStyle(button: thirdLayoutButton, style: photosView.invisibleStyle)
+        
+        firstLayoutButtonView.contentMode = .scaleAspectFill
+        firstLayoutButtonView.layer.masksToBounds = true
+        firstLayoutButtonView.clipsToBounds = true
+        firstLayoutButtonView.image = UIImage(named: "Layout 1")
+        firstLayoutButtonView.isUserInteractionEnabled = false
+        firstLayoutButtonView.layer.zPosition = 1
+        
+        secondLayoutButtonView.contentMode = .scaleAspectFill
+        secondLayoutButtonView.layer.masksToBounds = true
+        secondLayoutButtonView.clipsToBounds = true
+        secondLayoutButtonView.image = UIImage(named: "Layout 2")
+        secondLayoutButtonView.isUserInteractionEnabled = false
+        secondLayoutButtonView.layer.zPosition = 1
+        
+        thirdLayoutButtonView.contentMode = .scaleAspectFill
+        thirdLayoutButtonView.layer.masksToBounds = true
+        thirdLayoutButtonView.clipsToBounds = true
+        thirdLayoutButtonView.image = UIImage(named: "Layout 3")
+        thirdLayoutButtonView.isUserInteractionEnabled = false
+        thirdLayoutButtonView.layer.zPosition = 1
+    }
+    
+    
     // Sets the textViews font sizes according to screen size
     private func setFontSize(of textView: UITextView) {
         if textView.font != nil {
@@ -351,7 +493,91 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         }
     }
     
-    // Uses views sizes functions with appropriate verifications
+    // Create constraints according to screen size and places buttons in the first layout. Also places the corresponding views.
+    private func adaptPhotosViewElementsToItsSize() {
+        photosView.rectangle.translatesAutoresizingMaskIntoConstraints = false
+        photosView.rectangle.widthAnchor.constraint(equalToConstant: CGFloat(photosView.frame.width*270.0/300.0)).isActive = true
+        photosView.rectangle.heightAnchor.constraint(equalToConstant: CGFloat(photosView.frame.height*127.0/300.0)).isActive = true
+        photosView.rectangle.leadingAnchor.constraint(equalTo: photosView.leadingAnchor, constant: CGFloat(photosView.frame.height*17.0/300.0)).isActive = true
+        photosView.rectangle.topAnchor.constraint(equalTo: photosView.topAnchor, constant: CGFloat(photosView.frame.height*17.0/300.0)).isActive = true
+        
+        photosView.rectangleView.translatesAutoresizingMaskIntoConstraints = false
+        photosView.rectangleView.widthAnchor.constraint(equalToConstant: CGFloat(photosView.frame.width*270.0/300.0)).isActive = true
+        photosView.rectangleView.heightAnchor.constraint(equalToConstant: CGFloat(photosView.frame.height*127.0/300.0)).isActive = true
+        photosView.rectangleView.leadingAnchor.constraint(equalTo: photosView.leadingAnchor, constant: CGFloat(photosView.frame.height*17.0/300.0)).isActive = true
+        photosView.rectangleView.topAnchor.constraint(equalTo: photosView.topAnchor, constant: CGFloat(photosView.frame.height*17.0/300.0)).isActive = true
+        
+        
+        
+        photosView.leftButton.translatesAutoresizingMaskIntoConstraints = false
+        photosView.leftButton.widthAnchor.constraint(equalToConstant: CGFloat(photosView.frame.width*127.0/300.0)).isActive = true
+        photosView.leftButton.heightAnchor.constraint(equalToConstant: CGFloat(photosView.frame.height*127.0/300.0)).isActive = true
+        photosView.leftButton.leadingAnchor.constraint(equalTo: photosView.leadingAnchor, constant: CGFloat(photosView.frame.height*17.0/300.0)).isActive = true
+        photosView.leftButton.topAnchor.constraint(equalTo: photosView.topAnchor, constant: CGFloat(photosView.frame.height*158.0/300.0)).isActive = true
+        
+        photosView.leftButtonView.translatesAutoresizingMaskIntoConstraints = false
+        photosView.leftButtonView.widthAnchor.constraint(equalToConstant: CGFloat(photosView.frame.width*127.0/300.0)).isActive = true
+        photosView.leftButtonView.heightAnchor.constraint(equalToConstant: CGFloat(photosView.frame.height*127.0/300.0)).isActive = true
+        photosView.leftButtonView.leadingAnchor.constraint(equalTo: photosView.leadingAnchor, constant: CGFloat(photosView.frame.height*17.0/300.0)).isActive = true
+        photosView.leftButtonView.topAnchor.constraint(equalTo: photosView.topAnchor, constant: CGFloat(photosView.frame.height*158.0/300.0)).isActive = true
+        
+        
+        
+        
+        photosView.rightButton.translatesAutoresizingMaskIntoConstraints = false
+        photosView.rightButton.widthAnchor.constraint(equalToConstant: CGFloat(photosView.frame.width*127.0/300.0)).isActive = true
+        photosView.rightButton.heightAnchor.constraint(equalToConstant: CGFloat(photosView.frame.height*127.0/300.0)).isActive = true
+        photosView.rightButton.leadingAnchor.constraint(equalTo: photosView.leadingAnchor, constant: CGFloat(photosView.frame.height*156.0/300.0)).isActive = true
+        photosView.rightButton.topAnchor.constraint(equalTo: photosView.topAnchor, constant: CGFloat(photosView.frame.height*158.0/300.0)).isActive = true
+        
+        photosView.rightButtonView.translatesAutoresizingMaskIntoConstraints = false
+        photosView.rightButtonView.widthAnchor.constraint(equalToConstant: CGFloat(photosView.frame.width*127.0/300.0)).isActive = true
+        photosView.rightButtonView.heightAnchor.constraint(equalToConstant: CGFloat(photosView.frame.height*127.0/300.0)).isActive = true
+        photosView.rightButtonView.leadingAnchor.constraint(equalTo: photosView.leadingAnchor, constant: CGFloat(photosView.frame.height*156.0/300.0)).isActive = true
+        photosView.rightButtonView.topAnchor.constraint(equalTo: photosView.topAnchor, constant: CGFloat(photosView.frame.height*158.0/300.0)).isActive = true
+        
+        
+        
+        
+        photosView.topLeftButton.translatesAutoresizingMaskIntoConstraints = false
+        photosView.topLeftButton.widthAnchor.constraint(equalToConstant: CGFloat(photosView.frame.width*127.0/300.0)).isActive = true
+        photosView.topLeftButton.heightAnchor.constraint(equalToConstant: CGFloat(photosView.frame.height*127.0/300.0)).isActive = true
+        photosView.topLeftButton.leadingAnchor.constraint(equalTo: photosView.leadingAnchor, constant: CGFloat(photosView.frame.height*17.0/300.0)).isActive = true
+        photosView.topLeftButton.topAnchor.constraint(equalTo: photosView.topAnchor, constant: CGFloat(photosView.frame.height*17.0/300.0)).isActive = true
+        photosView.topLeftButton.alpha = 0
+        
+        photosView.topLeftButtonView.translatesAutoresizingMaskIntoConstraints = false
+        photosView.topLeftButtonView.widthAnchor.constraint(equalToConstant: CGFloat(photosView.frame.width*127.0/300.0)).isActive = true
+        photosView.topLeftButtonView.heightAnchor.constraint(equalToConstant: CGFloat(photosView.frame.height*127.0/300.0)).isActive = true
+        photosView.topLeftButtonView.leadingAnchor.constraint(equalTo: photosView.leadingAnchor, constant: CGFloat(photosView.frame.height*17.0/300.0)).isActive = true
+        photosView.topLeftButtonView.topAnchor.constraint(equalTo: photosView.topAnchor, constant: CGFloat(photosView.frame.height*17.0/300.0)).isActive = true
+        
+        
+        
+        
+        photosView.topRightButton.translatesAutoresizingMaskIntoConstraints = false
+        photosView.topRightButton.widthAnchor.constraint(equalToConstant: CGFloat(photosView.frame.width*127.0/300.0)).isActive = true
+        photosView.topRightButton.heightAnchor.constraint(equalToConstant: CGFloat(photosView.frame.height*127.0/300.0)).isActive = true
+        photosView.topRightButton.leadingAnchor.constraint(equalTo: photosView.leadingAnchor, constant: CGFloat(photosView.frame.height*156.0/300.0)).isActive = true
+        photosView.topRightButton.topAnchor.constraint(equalTo: photosView.topAnchor, constant: CGFloat(photosView.frame.height*17.0/300.0)).isActive = true
+        photosView.topRightButton.alpha = 0
+        
+        photosView.topRightButtonView.translatesAutoresizingMaskIntoConstraints = false
+        photosView.topRightButtonView.widthAnchor.constraint(equalToConstant: CGFloat(photosView.frame.width*127.0/300.0)).isActive = true
+        photosView.topRightButtonView.heightAnchor.constraint(equalToConstant: CGFloat(photosView.frame.height*127.0/300.0)).isActive = true
+        photosView.topRightButtonView.leadingAnchor.constraint(equalTo: photosView.leadingAnchor, constant: CGFloat(photosView.frame.height*156.0/300.0)).isActive = true
+        photosView.topRightButtonView.topAnchor.constraint(equalTo: photosView.topAnchor, constant: CGFloat(photosView.frame.height*17.0/300.0)).isActive = true
+        
+        let upMargin = photosView.frame.height*17.0/300.0
+        let downMargin = photosView.frame.height*158.0/300.0
+        let rightMargin = photosView.frame.width*17.0/300.0
+        
+        if photosView != nil {
+            photosView.setPositionValues(up: upMargin, down: downMargin, right: rightMargin)
+        }
+    }
+    
+    // Uses text sizes functions with appropriate verifications
     private func scaleViews() {
         if instagridTitleWidth == nil {
             initSizesValues()
@@ -378,6 +604,8 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             selectedSign.frame = thirdLayoutButtonView.frame
         }
     }
+    
+    
     
     
     // MARK: - Support
