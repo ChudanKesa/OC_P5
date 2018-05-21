@@ -24,21 +24,21 @@ class PhotosView: UIView {
     
     private func commonInit() {
         Bundle.main.loadNibNamed("PhotosView", owner: self, options: nil)
-        addSubview(photosView)
-        photosView.frame = self.bounds
-        photosView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        addSubview(mainView)
+        mainView.frame = self.bounds
+        mainView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         
         
-        if allOutletsAreLoaded() {
-            for index in views.indices {
-                views[index]!.alpha = 0
-                views[index]!.layer.zPosition = -1
-                views[index]!.isUserInteractionEnabled = false
-            }
+        for view in views {
+            guard let safeView = view else { return }
+            safeView.alpha = 0
+            safeView.layer.zPosition = -1
+            safeView.isUserInteractionEnabled = false
         }
         viewsToFollowButtons()
-        reccordStyles()
+        reccordStyles()        
     }
+    
     
 
 
@@ -49,9 +49,9 @@ class PhotosView: UIView {
     
     var topRightViewXPosition = CGFloat()
     
-    lazy var valuesAreSet = false
+    private lazy var valuesAreSet = false
     
-    var bufferTopRightViewXPosition: CGFloat?
+    private var bufferTopRightViewXPosition: CGFloat?
     
     lazy var rightButtonStyle = ButtonStyle()
     lazy var leftButtonStyle = ButtonStyle()
@@ -75,13 +75,13 @@ class PhotosView: UIView {
     
     lazy var currentStyle = layout.first
     
-    lazy var views = [rectangleView, leftButtonView, rightButtonView, topLeftButtonView, topRightButtonView]
-    lazy var buttons = [rectangle, leftButton, rightButton, topLeftButton, topRightButton]
+    private lazy var views = [rectangleView, leftButtonView, rightButtonView, topLeftButtonView, topRightButtonView]
+    private lazy var buttons = [rectangle, leftButton, rightButton, topLeftButton, topRightButton]
     
     // MARK: - Outlets & actions
     
 
-    @IBOutlet var photosView: UIView!
+    @IBOutlet var mainView: UIView!
     
     @IBOutlet weak var rectangle: UIButton!
     @IBOutlet weak var leftButton: UIButton!
@@ -98,17 +98,6 @@ class PhotosView: UIView {
     
     @IBAction func rectangleButtonTouched(_ sender: UIButton) {
         sendNotification("rectangle")
-        for button in buttons {
-            if button!.alpha == 0 || button!.isHidden == true {
-                print("Button hidden")
-            }
-        }
-        for view in views {
-            if view!.alpha == 0 || view!.isHidden == true {
-                print("View hidden")
-            }
-        }
-        
     }
     @IBAction func leftButtonTouched(_ sender: UIButton) {
         sendNotification("leftButton")
@@ -135,32 +124,34 @@ class PhotosView: UIView {
     // Reccord original look of the buttons so they can be restored later if needed
     private func reccordStyles() {
         let styles = [rectangleStyle, leftButtonStyle, rightButtonStyle, topLeftButtonStyle, topRightButtonStyle]
-        if allOutletsAreLoaded() {
-            for index in buttons.indices {
-                styles[index].color = buttons[index]!.backgroundColor!
-                styles[index].font = buttons[index]!.titleLabel!.font
-                styles[index].text = buttons[index]!.currentTitle!
-                styles[index].textColor = buttons[index]!.titleLabel!.textColor
-            }
+        
+        for index in buttons.indices {
+            guard let safeButton = buttons[index] else { return }
+            guard let title = safeButton.currentTitle else { return }
+            guard let label = safeButton.titleLabel else { return }
+            guard let backgroundColor = safeButton.backgroundColor else { return }
+            styles[index].color = backgroundColor
+            styles[index].font = label.font
+            styles[index].text = title
+            styles[index].textColor = label.textColor
         }
     }
     
     
     func setButtonStyle(button: UIButton, style: ButtonStyle) {
         button.backgroundColor = style.color
-        if button.titleLabel != nil {
-            button.titleLabel!.font = style.font
-            button.titleLabel!.text = style.text
-            button.titleLabel!.textColor = style.textColor
-        }
+        guard let label = button.titleLabel else { return }
+        label.font = style.font
+        label.text = style.text
+        label.textColor = style.textColor
     }
     
     
     private func viewsToFollowButtons() {
-        if allOutletsAreLoaded() {
-            for index in views.indices {
-                views[index]!.frame = buttons[index]!.frame
-            }
+        for index in views.indices {
+            guard let safeView = views[index] else { return }
+            guard let safeButton = buttons[index] else { return }
+            safeView.frame = safeButton.frame
         }
     }
     
@@ -168,14 +159,12 @@ class PhotosView: UIView {
     // Makes sure the views can't be seen if they don't hold an image, and get hidden along with their button if the layout changes.
     private func hideViewIfButtonIs() {
         for index in views.indices {
-            if views[index] != nil && buttons[index] != nil {
-                if views[index]!.image == nil {
-                    views[index]!.alpha = 0
-                } else if views[index]!.image != nil {
-                    views[index]!.alpha = buttons[index]!.alpha
-                }
+            guard let safeView = views[index] else { return }
+            guard let safeButton = buttons[index] else { return }
+            if safeView.image == nil {
+                safeView.alpha = 0
             } else {
-                print("**** Error getting views or buttons.")
+                safeView.alpha = safeButton.alpha
             }
         }
     }
@@ -408,81 +397,5 @@ class PhotosView: UIView {
         case .third:
             break
         }
-    }
-    
-    
-    // MARK: - Support
-    
-    // Makes sure that no outlet is nil
-    private func allOutletsAreLoaded() ->Bool {
-        var checkingValue = true
-        for index in views.indices {
-            if views[index] == nil {
-                checkingValue = false
-            }
-        }
-        for index in buttons.indices {
-            if buttons[index] == nil {
-                checkingValue = false
-            }
-        }
-        if photosView == nil {
-            checkingValue = false
-        }
-        if !checkingValue {
-            print("***\nProblem loading outlets.\n")
-        }
-        return checkingValue
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    func check() {
-        print("Rectangle:")
-        print(rectangle.frame.origin.x, rectangle.frame.origin.y)
-        print("z.pos: \(rectangle.layer.zPosition), alhpa: \(rectangle.alpha), hidden: \(rectangle.isHidden), enabled: \(rectangle.isEnabled), state: \(rectangle.state)")
-        
-        print("\nleftButton:")
-        print(leftButton.frame.origin.x, leftButton.frame.origin.y)
-        print("z.pos: \(leftButton.layer.zPosition), alhpa: \(leftButton.alpha), hidden: \(leftButton.isHidden), enabled: \(leftButton.isEnabled), state: \(leftButton.state)")
-        
-        print("\nrightButton:")
-        print(rightButton.frame.origin.x, rightButton.frame.origin.y)
-        print("z.pos: \(rightButton.layer.zPosition), alhpa: \(rightButton.alpha), hidden: \(rightButton.isHidden), enabled: \(rightButton.isEnabled), state: \(rightButton.state)")
-        
-        print("\ntopLeftButton:")
-        print(topLeftButton.frame.origin.x, topLeftButton.frame.origin.y)
-        print("z.pos: \(topLeftButton.layer.zPosition), alhpa: \(topLeftButton.alpha), hidden: \(topLeftButton.isHidden), enabled: \(topLeftButton.isEnabled), state: \(topLeftButton.state)")
-        
-        print("\ntopRightButton:")
-        print(topRightButton.frame.origin.x, topRightButton.frame.origin.y)
-        print("z.pos: \(topRightButton.layer.zPosition), alhpa: \(topRightButton.alpha), hidden: \(topRightButton.isHidden), enabled: \(topRightButton.isEnabled), state: \(topRightButton.state)")
-        
-        print("\nrectangleView:")
-        print(rectangleView.frame.origin.x, rectangleView.frame.origin.y)
-        print("z.pos: \(rectangleView.layer.zPosition), alhpa: \(rectangleView.alpha), hidden: \(rectangleView.isHidden)")
-        
-        print("\nleftButtonView:")
-        print(leftButtonView.frame.origin.x, leftButtonView.frame.origin.y)
-        print("z.pos: \(leftButtonView.layer.zPosition), alhpa: \(leftButtonView.alpha), hidden: \(leftButtonView.isHidden)")
-        
-        print("\nrightButtonView:")
-        print(rightButtonView.frame.origin.x, rightButtonView.frame.origin.y)
-        print("z.pos: \(rightButtonView.layer.zPosition), alhpa: \(rightButtonView.alpha), hidden: \(rightButtonView.isHidden)")
-        
-        print("\ntopLeftButtonView:")
-        print(topLeftButtonView.frame.origin.x, topLeftButtonView.frame.origin.y)
-        print("z.pos: \(topLeftButtonView.layer.zPosition), alhpa: \(topLeftButtonView.alpha), hidden: \(topLeftButtonView.isHidden)")
-        
-        print("\ntopRightButtonView:")
-        print(topRightButtonView.frame.origin.x, topRightButtonView.frame.origin.y)
-        print("z.pos: \(topRightButtonView.layer.zPosition), alhpa: \(topRightButtonView.alpha), hidden: \(topRightButtonView.isHidden)")
     }
 }

@@ -13,7 +13,7 @@
             <connections>
                 <outlet property="leftButton" destination="U7w-D6-UMh" id="K5P-EJ-fyx"/>
                 <outlet property="leftButtonView" destination="ycf-u9-euU" id="gXU-Ew-eRT"/>
-                <outlet property="photosView" destination="iN0-l3-epB" id="seO-YL-rnm"/>
+                <outlet property="mainView" destination="iN0-l3-epB" id="seO-YL-rnm"/>
                 <outlet property="rectangle" destination="edY-eU-3Qb" id="O2a-Qs-Lo7"/>
                 <outlet property="rectangleView" destination="TUB-eS-ebA" id="Zq6-lW-FLY"/>
                 <outlet property="rightButton" destination="Xw2-Pt-ooo" id="7MY-Ks-8G6"/>

@@ -134,7 +134,7 @@
                                     <action selector="rightButtonTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Xbq-cd-hiG"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="top" text="Instagrid" textAlignment="center" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Ae-aT-4Zk">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="top" text="Instagrid" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="2Ae-aT-4Zk">
                                 <rect key="frame" x="128.5" y="35" width="119" height="39"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="2Ae-aT-4Zk" secondAttribute="height" multiplier="119:39" id="5b2-GD-NJr"/>
