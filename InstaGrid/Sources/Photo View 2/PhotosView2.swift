@@ -10,6 +10,8 @@ import UIKit
 
 class PhotosView2: UIView {
 
+    // MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -26,6 +28,36 @@ class PhotosView2: UIView {
         mainView.frame = self.bounds
         mainView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
     }
+    
+    // MARK: - Outlets
 
     @IBOutlet var mainView: UIView!
+    
+    @IBOutlet weak var rectangle: UIButton!
+    @IBOutlet weak var leftButton: UIButton!
+    @IBOutlet weak var topLeftButton: UIButton!
+    @IBOutlet weak var rightButton: UIButton!
+    @IBOutlet weak var topRightButton: UIButton!
+    
+    @IBAction func rectangleButtonTouched(_ sender: UIButton) {
+        sendNotification("rectangle")
+    }
+    @IBAction func leftButtonTouched(_ sender: UIButton) {
+        sendNotification("leftButton")
+    }
+    @IBAction func topLeftButtonTouched(_ sender: UIButton) {
+        sendNotification("topLeftButton")
+    }
+    @IBAction func rightButtonTouched(_ sender: UIButton) {
+        sendNotification("rightButton")
+    }
+    @IBAction func topRightButtonTouched(_ sender: UIButton) {
+        sendNotification("topRightButton")
+    }
+    
+    // MARK: - Notification
+    
+    private func sendNotification(_ name: String) {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: name), object: nil)
+    }
 }
