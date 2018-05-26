@@ -57,13 +57,17 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     private lazy var orientation = direction.undefined
     private lazy var currentLayout = PhotosView.layout.first
     
-    private lazy var viewOriginX = photosView.frame.origin.x
-    private lazy var viewOriginY = photosView.frame.origin.y
+    private lazy var viewOriginX = photosViewsContainer.frame.origin.x
+    private lazy var viewOriginY = photosViewsContainer.frame.origin.y
+    
+    private lazy var photosView1 = PhotosView()
+    private lazy var photosView2 = PhotosView2()
+    private lazy var photosView3 = PhotosView3()
 
     
     // MARK: - Outlets & actions
     
-    @IBOutlet weak var photosView: PhotosView!
+    @IBOutlet weak var photosViewsContainer: UIView!
     
     @IBOutlet weak var instagridTitle: UITextView!
     @IBOutlet weak var instructionText: UITextView!
@@ -74,19 +78,19 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     
     @IBAction func leftButtonTouched(_ sender: UIButton) {
-        photosView.changeLayout(from: currentLayout, to: .first, animated: true)
+        photosViewsContainer.addSubview(photosView1)
         currentLayout = .first
         selectedSign.frame = firstLayoutButton.frame
     }
     
     @IBAction func centerButtonTouched(_ sender: UIButton) {
-        photosView.changeLayout(from: currentLayout, to: .second, animated: true)
+        photosViewsContainer.addSubview(photosView2)
         currentLayout = .second
         selectedSign.frame = secondLayoutButton.frame
     }
 
     @IBAction func rightButtonTouched(_ sender: UIButton) {
-        photosView.changeLayout(from: currentLayout, to: .third, animated: true)
+        photosViewsContainer.addSubview(photosView3)
         currentLayout = .third
         selectedSign.frame = thirdLayoutButton.frame
     }
@@ -96,7 +100,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        photosView.addGestureRecognizer(panGestureRecognizer)
+        photosViewsContainer.addGestureRecognizer(panGestureRecognizer)
         picker.delegate = self
         addNotificationObserversToViewControler()
     }
@@ -146,32 +150,32 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     @objc
     private func putPictureInRectangle() {
-        currentImageViewToFill = self.photosView.rectangleView
-        associatedButton = self.photosView.rectangle
+        currentImageViewToFill = self.photosViewsContainer.rectangleView
+        associatedButton = self.photosViewsContainer.rectangle
         choosePicture()
     }
     @objc
     private func putPictureInRightButton() {
-        currentImageViewToFill = self.photosView.rightButtonView
-        associatedButton = self.photosView.rightButton
+        currentImageViewToFill = self.photosViewsContainer.rightButtonView
+        associatedButton = self.photosViewsContainer.rightButton
         choosePicture()
     }
     @objc
     private func putPictureInLeftButton() {
-        currentImageViewToFill = self.photosView.leftButtonView
-        associatedButton = self.photosView.leftButton
+        currentImageViewToFill = self.photosViewsContainer.leftButtonView
+        associatedButton = self.photosViewsContainer.leftButton
         choosePicture()
     }
     @objc
     private func putPictureInTopRightButton() {
-        currentImageViewToFill = self.photosView.topRightButtonView
-        associatedButton = self.photosView.topRightButton
+        currentImageViewToFill = self.photosViewsContainer.topRightButtonView
+        associatedButton = self.photosViewsContainer.topRightButton
         choosePicture()
     }
     @objc
     private func putPictureInTopLeftButton() {
-        currentImageViewToFill = self.photosView.topLeftButtonView
-        associatedButton = self.photosView.topLeftButton
+        currentImageViewToFill = self.photosViewsContainer.topLeftButtonView
+        associatedButton = self.photosViewsContainer.topLeftButton
         choosePicture()
     }
     
@@ -216,7 +220,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let photo = (info[UIImagePickerControllerEditedImage] ?? info[UIImagePickerControllerOriginalImage]) as? UIImage {
             photoSetting(photo)
-            guard let photosContainer = self.photosView  else { return }
+            guard let photosContainer = self.photosViewsContainer  else { return }
             photosContainer.setButtonStyle(button: self.associatedButton, style: self.photosView.invisibleStyle)
         }
         picker.presentingViewController?.dismiss(animated: true, completion: nil)
@@ -235,7 +239,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     // Makes photosView move according to settings.
     @objc
     private func moveView(gesture: UIPanGestureRecognizer) {
-        guard let movingPhotosView = self.photosView else { return }
+        guard let movingPhotosView = self.photosViewsContainer else { return }
         
         switch gesture.state {
         case .began, .changed:
@@ -256,10 +260,9 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     // Sets background back to original color and shares view.
     private func share() {
-        guard let viewPhotos = photosView else { return }
-        guard let mainPhotosView = viewPhotos.mainView else { return }
+        guard let mainPhotosView = photosViewsContainer else { return }
         mainPhotosView.backgroundColor = #colorLiteral(red: 0.1046529487, green: 0.3947933912, blue: 0.6130493283, alpha: 1)
-        guard let viewToShare = viewPhotos.toUIImage() else { return }
+        guard let viewToShare = mainPhotosView.toUIImage() else { return }
         
         let vc = UIActivityViewController(activityItems: [viewToShare], applicationActivities: [])
         present(vc, animated: true)
@@ -269,13 +272,13 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     // Calls orientation setting and makes photosView move straight. Also color view's backround if needed.
     private func moveViewStraight(whithMovement movement: CGPoint) {
         setOrientation(basedOn: movement, isNeeded: orientation == .undefined ? true : false)
-        photosView.transform = CGAffineTransform(translationX: orientation == .horizontal ? movement.x : 0, y: orientation == .vertical ? movement.y : 0)
+        photosViewsContainer.transform = CGAffineTransform(translationX: orientation == .horizontal ? movement.x : 0, y: orientation == .vertical ? movement.y : 0)
         colorPhotosView()
     }
     
     // Checks if photosView can move freely or if movement has to be set.
     private func setMovementBehavior(of movement: CGPoint) {
-        abs(movement.x) < 25 && abs(movement.y) < 25 && orientation == .undefined ? photosView.transform = CGAffineTransform(translationX: movement.x, y: movement.y) : moveViewStraight(whithMovement: movement)
+        abs(movement.x) < 25 && abs(movement.y) < 25 && orientation == .undefined ? photosViewsContainer.transform = CGAffineTransform(translationX: movement.x, y: movement.y) : moveViewStraight(whithMovement: movement)
     }
     
     // Sets orientation if it's not already.
@@ -285,7 +288,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     // Animates photosView up out of view and back in the middle.
     private func animateViewAwayAndBackOnYAxis() {
-        guard let view = self.photosView else { return }
+        guard let view = self.photosViewsContainer else { return }
         UIView.animate(withDuration: 1.0, animations: { [weak self] in
             guard let strongSelf = self else { return }
             guard let strongSelfView = strongSelf.view else { return }
@@ -299,7 +302,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     // Animates photosView left out of view and back in the middle.
     private func animateViewAwayAndBackOnXAxis() {
-        guard let view = self.photosView else { return }
+        guard let view = self.photosViewsContainer else { return }
         UIView.animate(withDuration: 1.0, animations: { [weak self] in
             guard let strongSelf = self else { return }
             guard let strongSelfView = strongSelf.view else { return }
@@ -325,7 +328,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     // Simply put view back to .identity. Only exists for clearer reading of calling functions.
     private func animateViewBackToIdentity() {
-        UIView.animate(withDuration: 0.3, animations: {self.photosView.transform = .identity})
+        UIView.animate(withDuration: 0.3, animations: {self.photosViewsContainer.transform = .identity})
     }
     
     // Decides wheter view should be shared or go back in original place on portrait mode.
@@ -343,7 +346,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     private func initSizesValues() {
         guard let controlerView = self.view else { return }
 
-        photosView != nil ? photosViewSizeSetting(accordingTo: controlerView) : callsFatalError(withMessage: "\n**** photosView didn't load.\n")
+        photosViewsContainer != nil ? photosViewSizeSetting(accordingTo: controlerView) : callsFatalError(withMessage: "\n**** photosView didn't load.\n")
         
         instagridTitle != nil ? instagridTitleSizeSetting(accordingTo: controlerView) : callsFatalError(withMessage: "instaGrid Title didn't load.\n")
         
@@ -393,7 +396,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     private func setSizeOfPhotosView() {
-        guard let viewOfPhotos = photosView else { return }
+        guard let viewOfPhotos = photosViewsContainer else { return }
         guard let viewOfPhotsWidth = photosViewWidth else { return }
         for constraint in viewOfPhotos.constraints {
             guard let identifier = constraint.identifier else { return }
@@ -476,7 +479,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     private func setButtonsStyle() {
-        guard let viewOfPhotos = photosView else { return }
+        guard let viewOfPhotos = photosViewsContainer else { return }
         viewOfPhotos.setButtonStyle(button: firstLayoutButton, style: photosView.invisibleStyle)
         viewOfPhotos.setButtonStyle(button: secondLayoutButton, style: photosView.invisibleStyle)
         viewOfPhotos.setButtonStyle(button: thirdLayoutButton, style: photosView.invisibleStyle)
@@ -555,7 +558,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     private func adaptRectangle() {
-        guard let viewOfPhotos = photosView else { return }
+        guard let viewOfPhotos = photosViewsContainer else { return }
         guard let rectangle = viewOfPhotos.rectangle else { return }
         rectangle.translatesAutoresizingMaskIntoConstraints = false
         rectangle.widthAnchor.constraint(equalToConstant: CGFloat(viewOfPhotos.frame.width*270.0/300.0)).isActive = true
@@ -565,7 +568,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     private func adaptRectangleView() {
-        guard let viewOfPhotos = photosView else { return }
+        guard let viewOfPhotos = photosViewsContainer else { return }
         guard let rectangleView = viewOfPhotos.rectangleView else { return }
         rectangleView.translatesAutoresizingMaskIntoConstraints = false
         rectangleView.widthAnchor.constraint(equalToConstant: CGFloat(viewOfPhotos.frame.width*270.0/300.0)).isActive = true
@@ -575,7 +578,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     private func adaptLeftButton() {
-        guard let viewOfPhotos = photosView else { return }
+        guard let viewOfPhotos = photosViewsContainer else { return }
         guard let leftButton = viewOfPhotos.leftButton else { return }
         leftButton.translatesAutoresizingMaskIntoConstraints = false
         leftButton.widthAnchor.constraint(equalToConstant: CGFloat(viewOfPhotos.frame.width*127.0/300.0)).isActive = true
@@ -585,7 +588,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     private func adaptLeftButtonView() {
-        guard let viewOfPhotos = photosView else { return }
+        guard let viewOfPhotos = photosViewsContainer else { return }
         guard let leftButtonView = viewOfPhotos.leftButtonView else { return }
         leftButtonView.translatesAutoresizingMaskIntoConstraints = false
         leftButtonView.widthAnchor.constraint(equalToConstant: CGFloat(viewOfPhotos.frame.width*127.0/300.0)).isActive = true
@@ -595,7 +598,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     private func adaptRightButton() {
-        guard let viewOfPhotos = photosView else { return }
+        guard let viewOfPhotos = photosViewsContainer else { return }
         guard let rightButton = viewOfPhotos.rightButton else { return }
         rightButton.translatesAutoresizingMaskIntoConstraints = false
         rightButton.widthAnchor.constraint(equalToConstant: CGFloat(viewOfPhotos.frame.width*127.0/300.0)).isActive = true
@@ -605,7 +608,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     private func adaptRightButtonView() {
-        guard let viewOfPhotos = photosView else { return }
+        guard let viewOfPhotos = photosViewsContainer else { return }
         guard let rightButtonView = viewOfPhotos.rightButtonView else { return }
         rightButtonView.translatesAutoresizingMaskIntoConstraints = false
         rightButtonView.widthAnchor.constraint(equalToConstant: CGFloat(viewOfPhotos.frame.width*127.0/300.0)).isActive = true
@@ -615,7 +618,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     private func adapttopLeftButton() {
-        guard let viewOfPhotos = photosView else { return }
+        guard let viewOfPhotos = photosViewsContainer else { return }
         guard let topLeftButton = viewOfPhotos.topLeftButton else { return }
         topLeftButton.translatesAutoresizingMaskIntoConstraints = false
         topLeftButton.widthAnchor.constraint(equalToConstant: CGFloat(viewOfPhotos.frame.width*127.0/300.0)).isActive = true
@@ -626,7 +629,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     private func adaptTopLeftButtonView() {
-        guard let viewOfPhotos = photosView else { return }
+        guard let viewOfPhotos = photosViewsContainer else { return }
         guard let topLeftButtonView = viewOfPhotos.topLeftButtonView else { return }
         topLeftButtonView.translatesAutoresizingMaskIntoConstraints = false
         topLeftButtonView.widthAnchor.constraint(equalToConstant: CGFloat(viewOfPhotos.frame.width*127.0/300.0)).isActive = true
@@ -636,7 +639,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     private func adaptTopRightButton() {
-        guard let viewOfPhotos = photosView else { return }
+        guard let viewOfPhotos = photosViewsContainer else { return }
         guard let topRightButton = viewOfPhotos.topRightButton else { return }
         topRightButton.translatesAutoresizingMaskIntoConstraints = false
         topRightButton.widthAnchor.constraint(equalToConstant: CGFloat(viewOfPhotos.frame.width*127.0/300.0)).isActive = true
@@ -647,7 +650,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     private func adaptTopRightButtonView() {
-        guard let viewOfPhotos = photosView else { return }
+        guard let viewOfPhotos = photosViewsContainer else { return }
         guard let topRightButtonView = viewOfPhotos.topRightButtonView else { return }
         topRightButtonView.translatesAutoresizingMaskIntoConstraints = false
         topRightButtonView.widthAnchor.constraint(equalToConstant: CGFloat(viewOfPhotos.frame.width*127.0/300.0)).isActive = true
@@ -657,7 +660,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     private func setPhotosViewPositionValues() {
-        guard let viewOfPhotos = photosView else { return }
+        guard let viewOfPhotos = photosViewsContainer else { return }
         let upMargin = viewOfPhotos.frame.height*17.0/300.0
         let downMargin = viewOfPhotos.frame.height*158.0/300.0
         let rightMargin = viewOfPhotos.frame.width*17.0/300.0
@@ -714,16 +717,16 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     // Makes the photosView's backround green if share upon release is enabled
     private func colorPhotosView() {
         if isPortrait {
-            if photosView.frame.origin.y < (viewOriginY-50) {
-                photosView.mainView.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+            if photosViewsContainer.frame.origin.y < (viewOriginY-50) {
+                photosViewsContainer.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
             } else {
-                photosView.mainView.backgroundColor = #colorLiteral(red: 0.1046529487, green: 0.3947933912, blue: 0.6130493283, alpha: 1)
+                photosViewsContainer.backgroundColor = #colorLiteral(red: 0.1046529487, green: 0.3947933912, blue: 0.6130493283, alpha: 1)
             }
         } else if isLandscape {
-            if photosView.frame.origin.x < (viewOriginX-50) {
-                photosView.mainView.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+            if photosViewsContainer.frame.origin.x < (viewOriginX-50) {
+                photosViewsContainer.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
             } else {
-                photosView.mainView.backgroundColor = #colorLiteral(red: 0.1046529487, green: 0.3947933912, blue: 0.6130493283, alpha: 1)
+                photosViewsContainer.backgroundColor = #colorLiteral(red: 0.1046529487, green: 0.3947933912, blue: 0.6130493283, alpha: 1)
             }
         }
     }
