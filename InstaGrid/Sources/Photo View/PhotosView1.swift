@@ -36,9 +36,9 @@ class PhotosView: UIView {
     private lazy var buttons = [rectangle, leftButton, rightButton]
     private lazy var views = [rectangleView, leftButtonView, rightButtonView]
     
-    private lazy var rectangleView = UIImageView()
-    private lazy var leftButtonView = UIImageView()
-    private lazy var rightButtonView = UIImageView()
+    lazy var rectangleView = UIImageView()
+    lazy var leftButtonView = UIImageView()
+    lazy var rightButtonView = UIImageView()
     
     // MARK: - Outlets & actions
     @IBOutlet var mainView: UIView!

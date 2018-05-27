@@ -57,10 +57,10 @@ class PhotosView3: UIView {
     private lazy var buttons = [leftButton, topLeftButton, rightButton, topRightButton]
     private lazy var views = [leftButtonView, topLeftButtonView, rightButtonView, topRightButtonView]
     
-    private lazy var leftButtonView = UIImageView()
-    private lazy var topLeftButtonView = UIImageView()
-    private lazy var rightButtonView = UIImageView()
-    private lazy var topRightButtonView = UIImageView()
+    lazy var leftButtonView = UIImageView()
+    lazy var topLeftButtonView = UIImageView()
+    lazy var rightButtonView = UIImageView()
+    lazy var topRightButtonView = UIImageView()
     
     // MARK: - Notification
     
