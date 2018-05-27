@@ -83,6 +83,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     
     @IBAction func leftButtonTouched(_ sender: UIButton) {
+        removeSubviewsFromPhotosViewsContainer()
         setViewFrame(of: photosView1)
         photosViewsContainer.addSubview(photosView1)
         currentView = .first
@@ -90,6 +91,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     @IBAction func centerButtonTouched(_ sender: UIButton) {
+        removeSubviewsFromPhotosViewsContainer()
         setViewFrame(of: photosView2)
         photosViewsContainer.addSubview(photosView2)
         currentView = .second
@@ -97,6 +99,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
 
     @IBAction func rightButtonTouched(_ sender: UIButton) {
+        removeSubviewsFromPhotosViewsContainer()
         setViewFrame(of: photosView3)
         photosViewsContainer.addSubview(photosView3)
         currentView = .third
@@ -386,6 +389,16 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     // MARK: - Configuration
+    private func removeSubviewsFromPhotosViewsContainer() {
+        guard let safeContainer = photosViewsContainer else { return }
+        if safeContainer.subviews.count > 0 {
+            for subview in safeContainer.subviews {
+                subview.removeFromSuperview()
+            }
+        }
+    }
+    
+    // Sets the frame of the photosViews added to photosViewsContainer
     private func setViewFrame(of view: UIView) {
         guard let safeContainer = photosViewsContainer else { return }
         view.frame = safeContainer.frame

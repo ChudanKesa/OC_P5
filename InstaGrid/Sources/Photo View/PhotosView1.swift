@@ -94,7 +94,7 @@ class PhotosView: UIView {
     }
     
     private func setRightButton() {
-        guard let safeRightButton = leftButton else { return }
+        guard let safeRightButton = rightButton else { return }
         let frame = CGRect(x: 160.0, y: 160.0, width: scalingLenghtToViewWidth(lenght: 127.0), height: scalingLenghtToViewHeight(lenght: 127.0))
         safeRightButton.frame = frame
     }
