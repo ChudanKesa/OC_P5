@@ -72,6 +72,17 @@ class PhotosView: UIView {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: name), object: nil)
     }
     
+    // MARK: - Public
+    func setImage(_ photo: UIImage, for button: UIButton) {
+        let imageView = UIImageView(image: photo)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        button.addSubview(imageView)
+        imageView.topAnchor.constraint(equalTo: button.topAnchor, constant: 0.0).isActive = true
+        imageView.leftAnchor.constraint(equalTo: button.leftAnchor, constant: 0.0).isActive = true
+        imageView.bottomAnchor.constraint(equalTo: button.bottomAnchor, constant: 0.0).isActive = true
+        imageView.rightAnchor.constraint(equalTo: button.rightAnchor, constant: 0.0).isActive = true
+    }
+    
     // MARK: - Configuration
     func setSizesAndPositionsOfElements() {
         setRectangleButton()

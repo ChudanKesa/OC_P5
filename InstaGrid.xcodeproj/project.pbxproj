@@ -16,6 +16,7 @@
 		504B2258209C3A6700440BFE /* UIView+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504B2257209C3A6700440BFE /* UIView+UIImage.swift */; };
 		504B2259209C3ECB00440BFE /* Delm-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 504B2253209C338700440BFE /* Delm-Medium.otf */; };
 		504B225A209C3ECE00440BFE /* ThirstySoftRegular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 504B2252209C337F00440BFE /* ThirstySoftRegular.otf */; };
+		505ACFF320CFC34E00FF8F63 /* UIView+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505ACFF220CFC34E00FF8F63 /* UIView+Color.swift */; };
 		508A96AF20B6F18C002B4BF4 /* PhotosView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508A96AE20B6F18C002B4BF4 /* PhotosView2.swift */; };
 		508A96B120B6F199002B4BF4 /* PhotosView2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508A96B020B6F199002B4BF4 /* PhotosView2.xib */; };
 		508A96B320B6F1AA002B4BF4 /* PhotosView3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508A96B220B6F1AA002B4BF4 /* PhotosView3.swift */; };
@@ -36,6 +37,7 @@
 		504B2253209C338700440BFE /* Delm-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Delm-Medium.otf"; sourceTree = "<group>"; };
 		504B2254209C39A500440BFE /* Button Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button Style.swift"; sourceTree = "<group>"; };
 		504B2257209C3A6700440BFE /* UIView+UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+UIImage.swift"; sourceTree = "<group>"; };
+		505ACFF220CFC34E00FF8F63 /* UIView+Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Color.swift"; sourceTree = "<group>"; };
 		508A96AE20B6F18C002B4BF4 /* PhotosView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosView2.swift; sourceTree = "<group>"; };
 		508A96B020B6F199002B4BF4 /* PhotosView2.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PhotosView2.xib; sourceTree = "<group>"; };
 		508A96B220B6F1AA002B4BF4 /* PhotosView3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosView3.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 			children = (
 				504B2254209C39A500440BFE /* Button Style.swift */,
 				504B2257209C3A6700440BFE /* UIView+UIImage.swift */,
+				505ACFF220CFC34E00FF8F63 /* UIView+Color.swift */,
 			);
 			path = "Extension & classes";
 			sourceTree = "<group>";
@@ -227,6 +230,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				505ACFF320CFC34E00FF8F63 /* UIView+Color.swift in Sources */,
 				508A96B320B6F1AA002B4BF4 /* PhotosView3.swift in Sources */,
 				5028AC3A2099EA11006CA67E /* HomeViewController.swift in Sources */,
 				504B2258209C3A6700440BFE /* UIView+UIImage.swift in Sources */,

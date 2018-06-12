@@ -56,8 +56,8 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     private lazy var orientation = Direction.undefined
     
-    private lazy var viewOriginX = photosViewsContainer.frame.origin.x
-    private lazy var viewOriginY = photosViewsContainer.frame.origin.y
+    private lazy var viewOriginX = CGFloat()
+    private lazy var viewOriginY = CGFloat()
     
     private lazy var photosView1 = PhotosView()
     private lazy var photosView2 = PhotosView2()
@@ -68,7 +68,6 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     private lazy var currentView = CurrentPhotosViewInUse.first
-
     
     // MARK: - Outlets & actions
     
@@ -130,6 +129,8 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         setFontSize(of: instructionText)
         
         checkIfButtonsAreSet()
+        
+        setViewOriginPosition()
         
         leftButtonTouched(UIButton())
         
@@ -271,7 +272,14 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let photo = (info[UIImagePickerControllerEditedImage] ?? info[UIImagePickerControllerOriginalImage]) as? UIImage {
-            photoSetting(photo)
+            switch currentView {
+            case .first:
+                photosView1.setImage(photo, for: associatedButton)
+            case .second:
+                photosView2.setImage(photo, for: associatedButton)
+            case .third:
+                photosView3.setImage(photo, for: associatedButton)
+            }
         }
         picker.presentingViewController?.dismiss(animated: true, completion: nil)
     }
@@ -311,7 +319,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     // Sets background back to original color and shares view.
     private func share() {
         guard let mainPhotosView = photosViewsContainer else { return }
-        mainPhotosView.backgroundColor = #colorLiteral(red: 0.1046529487, green: 0.3947933912, blue: 0.6130493283, alpha: 1)
+        turnCurrentViewBlue()
         guard let viewToShare = mainPhotosView.toUIImage() else { return }
         
         let vc = UIActivityViewController(activityItems: [viewToShare], applicationActivities: [])
@@ -392,6 +400,13 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     // MARK: - Configuration
+    
+    private func setViewOriginPosition() {
+        viewOriginX = photosViewsContainer.frame.origin.x
+        viewOriginY = photosViewsContainer.frame.origin.y
+    }
+    
+    
     private func checkIfButtonsAreSet() {
         var alreadySet = false
         guard let viewControlerView = self.view else { return }
@@ -437,13 +452,30 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     private func initSizesValues() {
         guard let controlerView = self.view else { return }
 
-        photosViewsContainer != nil ? photosViewSizeSetting(accordingTo: controlerView) : callsFatalError(withMessage: "\n**** photosView didn't load.\n")
+        if photosViewsContainer != nil {
+            photosViewSizeSetting(accordingTo: controlerView)
+        } else {
+            fatalError("photosViewContainer = nil")
+        }
         
-        instagridTitle != nil ? instagridTitleSizeSetting(accordingTo: controlerView) : callsFatalError(withMessage: "instaGrid Title didn't load.\n")
+        if instagridTitle != nil {
+            instagridTitleSizeSetting(accordingTo: controlerView)
+        } else {
+            fatalError("instagridTitle = nil")
+        }
         
-        instructionText != nil ? instagridTitleSizeSetting(accordingTo: controlerView) : callsFatalError(withMessage: "instructionText didn't load.\n")
+        if instructionText != nil {
+            instructionTextSizeSetting(accordingTo: controlerView)
+        } else {
+            fatalError("instructionText = nil")
+        }
         
-        thirdLayoutButton != nil && secondLayoutButton != nil && firstLayoutButton != nil ? layoutButtonSizeSetting(accordingTo: controlerView) : callsFatalError(withMessage: "Layout buttons didn't load.\n")
+        if thirdLayoutButton != nil && secondLayoutButton != nil && firstLayoutButton != nil {
+            layoutButtonSizeSetting(accordingTo: controlerView)
+        } else {
+            fatalError("layout buttons = nil")
+        }
+        
     }
     
     private func photosViewSizeSetting(accordingTo constrolerView: UIView) {
@@ -471,11 +503,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         buttonHeight = controlerView.frame.height*80.0/736.0
         buttonWidth = controlerView.frame.width*80.0/414.0
     }
-    
-    // So as to be able to fatalError in ternary operator (since it won't accept a "Never" type as argument).
-    private func callsFatalError(withMessage problem: String) {
-        fatalError(problem)
-    }
+
     
     
     // Sets views sizes to reccorded values
@@ -662,30 +690,44 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         }
     }
     
-    // Sets the image selected for use in photoView
-    private func photoSetting(_ photo: UIImage) {
-        self.currentImageViewToFill.alpha = 1
-        self.currentImageViewToFill.contentMode = .scaleAspectFill
-        self.currentImageViewToFill.layer.masksToBounds = true
-        self.currentImageViewToFill.clipsToBounds = true
-        self.currentImageViewToFill.image = photo
-    }
-    
     
     // Makes the photosView's backround green if share upon release is enabled
     private func colorPhotosView() {
         if isPortrait {
             if photosViewsContainer.frame.origin.y < (viewOriginY-50) {
-                photosViewsContainer.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+                turnCurrentViewGreen()
             } else {
-                photosViewsContainer.backgroundColor = #colorLiteral(red: 0.1046529487, green: 0.3947933912, blue: 0.6130493283, alpha: 1)
+                turnCurrentViewBlue()
             }
         } else if isLandscape {
             if photosViewsContainer.frame.origin.x < (viewOriginX-50) {
-                photosViewsContainer.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+                turnCurrentViewGreen()
             } else {
-                photosViewsContainer.backgroundColor = #colorLiteral(red: 0.1046529487, green: 0.3947933912, blue: 0.6130493283, alpha: 1)
+                turnCurrentViewBlue()
             }
+        }
+    }
+    
+    private func turnCurrentViewGreen() {
+        switch currentView {
+        case .first:
+            photosView1.colorBackgroundGreen()
+        case .second:
+            photosView2.colorBackgroundGreen()
+        case .third:
+            photosView3.colorBackgroundGreen()
+        }
+    }
+    
+    
+    private func turnCurrentViewBlue() {
+        switch currentView {
+        case .first:
+            photosView1.colorBackgroundBlue()
+        case .second:
+            photosView2.colorBackgroundBlue()
+        case .third:
+            photosView3.colorBackgroundBlue()
         }
     }
 
