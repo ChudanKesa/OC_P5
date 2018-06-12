@@ -25,8 +25,6 @@ class PhotosView3: UIView {
         addSubview(mainView)
         mainView.frame = self.bounds
         mainView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        
-        setSizesPositionsAndStylesOfElements()
     }
 
     // MARK: - Outlets
@@ -37,6 +35,24 @@ class PhotosView3: UIView {
     @IBOutlet weak var topLeftButton: UIButton!
     @IBOutlet weak var rightButton: UIButton!
     @IBOutlet weak var topRightButton: UIButton!
+    
+    @IBOutlet weak var topRightButtonHeight: NSLayoutConstraint!
+    @IBOutlet weak var topRightButtonWidth: NSLayoutConstraint!
+    @IBOutlet weak var topLeftButtonWidth: NSLayoutConstraint!
+    @IBOutlet weak var topLeftButtonHeight: NSLayoutConstraint!
+    @IBOutlet weak var rightButtonHeight: NSLayoutConstraint!
+    @IBOutlet weak var rightButtonWidth: NSLayoutConstraint!
+    @IBOutlet weak var leftButtonWidth: NSLayoutConstraint!
+    @IBOutlet weak var leftButtonHeight: NSLayoutConstraint!
+    
+    @IBOutlet weak var leftButtonBottom: NSLayoutConstraint!
+    @IBOutlet weak var leftButtonLeading: NSLayoutConstraint!
+    @IBOutlet weak var rightButtonBottom: NSLayoutConstraint!
+    @IBOutlet weak var rightButtonTrailing: NSLayoutConstraint!
+    @IBOutlet weak var topLeftButtonTop: NSLayoutConstraint!
+    @IBOutlet weak var topLeftButtonLeading: NSLayoutConstraint!
+    @IBOutlet weak var topRightButtonTop: NSLayoutConstraint!
+    @IBOutlet weak var topRightButtonTrailing: NSLayoutConstraint!
     
 
     @IBAction func leftButtonTouched(_ sender: UIButton) {
@@ -77,7 +93,7 @@ class PhotosView3: UIView {
         return lenght * self.frame.height / 300
     }
     
-    private func setSizesPositionsAndStylesOfElements() {
+    func setSizesAndPositionsOfElements() {
         setLeftButton()
         setRightButton()
         setTopLeftButton()
@@ -90,27 +106,51 @@ class PhotosView3: UIView {
 
     
     private func setLeftButton() {
-        guard let safeLeftButton = leftButton else { return }
-        let frame = CGRect(x: 17.0, y: 160.0, width: scalingLenghtToViewWidth(lenght: 127.0), height: scalingLenghtToViewHeight(lenght: 127.0))
-        safeLeftButton.frame = frame
+        guard let safeBottom = leftButtonBottom else { return }
+        guard let safeLead = leftButtonLeading else { return }
+        guard let safeWidth = leftButtonWidth else { return }
+        guard let safeHeigth = leftButtonHeight else { return }
+        
+        safeBottom.constant = scalingLenghtToViewWidth(lenght: 17)
+        safeLead.constant = scalingLenghtToViewWidth(lenght: 17)
+        safeWidth.constant = scalingLenghtToViewWidth(lenght: 127)
+        safeHeigth.constant = scalingLenghtToViewHeight(lenght: 127)
     }
     
     private func setTopLeftButton() {
-        guard let safeTopLeftButton = leftButton else { return }
-        let frame = CGRect(x: 17.0, y: 17.0, width: scalingLenghtToViewWidth(lenght: 127.0), height: scalingLenghtToViewHeight(lenght: 127.0))
-        safeTopLeftButton.frame = frame
+        guard let safeTop = topLeftButtonTop else { return }
+        guard let safeLead = topLeftButtonLeading else { return }
+        guard let safeWidth = topLeftButtonWidth else { return }
+        guard let safeHeigth = topLeftButtonHeight else { return }
+        
+        safeTop.constant = scalingLenghtToViewWidth(lenght: 17)
+        safeLead.constant = scalingLenghtToViewWidth(lenght: 17)
+        safeWidth.constant = scalingLenghtToViewWidth(lenght: 127)
+        safeHeigth.constant = scalingLenghtToViewHeight(lenght: 127)
     }
     
     private func setRightButton() {
-        guard let safeRightButton = leftButton else { return }
-        let frame = CGRect(x: 160.0, y: 17.0, width: scalingLenghtToViewWidth(lenght: 127.0), height: scalingLenghtToViewHeight(lenght: 127.0))
-        safeRightButton.frame = frame
+        guard let safeBottom = rightButtonBottom else { return }
+        guard let safeTrail = rightButtonTrailing else { return }
+        guard let safeWidth = rightButtonWidth else { return }
+        guard let safeHeigth = rightButtonHeight else { return }
+        
+        safeBottom.constant = scalingLenghtToViewWidth(lenght: 17)
+        safeTrail.constant = scalingLenghtToViewWidth(lenght: 13)
+        safeWidth.constant = scalingLenghtToViewWidth(lenght: 127)
+        safeHeigth.constant = scalingLenghtToViewHeight(lenght: 127)
     }
     
     private func setTopRightButton() {
-        guard let safeTopRightButton = leftButton else { return }
-        let frame = CGRect(x: 160.0, y: 160.0, width: scalingLenghtToViewWidth(lenght: 127.0), height: scalingLenghtToViewHeight(lenght: 127.0))
-        safeTopRightButton.frame = frame
+        guard let safeTop = topRightButtonTop else { return }
+        guard let safeTrail = topRightButtonTrailing else { return }
+        guard let safeWidth = topRightButtonWidth else { return }
+        guard let safeHeigth = topRightButtonHeight else { return }
+        
+        safeTop.constant = scalingLenghtToViewWidth(lenght: 17)
+        safeTrail.constant = scalingLenghtToViewWidth(lenght: 13)
+        safeWidth.constant = scalingLenghtToViewWidth(lenght: 127)
+        safeHeigth.constant = scalingLenghtToViewHeight(lenght: 127)
     }
     
     private func setAndAddViews() {
@@ -135,8 +175,10 @@ class PhotosView3: UIView {
     private func setButtonsStyle() {
         for button in buttons {
             guard let safeButton = button else { return }
+            guard let label = safeButton.titleLabel else { return }
             
             safeButton.setTitle("+", for: [])
+            label.font = label.font.withSize(77)
             safeButton.setTitleColor(#colorLiteral(red: 0.323646307, green: 0.5646677017, blue: 0.7364179492, alpha: 1), for: [])
             safeButton.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         }

@@ -26,9 +26,7 @@ class PhotosView2: UIView {
         Bundle.main.loadNibNamed("PhotosView2", owner: self, options: nil)
         addSubview(mainView)
         mainView.frame = self.bounds
-        mainView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        
-        setSizesAndPositionsOfElements()
+        mainView.autoresizingMask = [.flexibleHeight, .flexibleWidth]        
     }
     
     // MARK: - Outlets
@@ -39,6 +37,19 @@ class PhotosView2: UIView {
     @IBOutlet weak var leftButton: UIButton!
     @IBOutlet weak var rightButton: UIButton!
     
+    @IBOutlet weak var rectangleWidth: NSLayoutConstraint!
+    @IBOutlet weak var rectangleHeight: NSLayoutConstraint!
+    @IBOutlet weak var leftButtonWidth: NSLayoutConstraint!
+    @IBOutlet weak var leftButtonHeight: NSLayoutConstraint!
+    @IBOutlet weak var rightButtonWidth: NSLayoutConstraint!
+    @IBOutlet weak var rightButtonHeight: NSLayoutConstraint!
+    
+    @IBOutlet weak var rightButtonTrailing: NSLayoutConstraint!
+    @IBOutlet weak var rightButtonTop: NSLayoutConstraint!
+    @IBOutlet weak var leftButtonLeading: NSLayoutConstraint!
+    @IBOutlet weak var leftButtonTop: NSLayoutConstraint!
+    @IBOutlet weak var rectangleLeading: NSLayoutConstraint!
+    @IBOutlet weak var rectangleBottom: NSLayoutConstraint!
     @IBAction func rectangleButtonTouched(_ sender: UIButton) {
         sendNotification("rectangle")
     }
@@ -74,7 +85,7 @@ class PhotosView2: UIView {
         return lenght * self.frame.height / 300
     }
     
-    private func setSizesAndPositionsOfElements() {
+    func setSizesAndPositionsOfElements() {
         setRectangleButton()
         setLeftButton()
         setRightButton()
@@ -85,21 +96,39 @@ class PhotosView2: UIView {
     }
     
     private func setRectangleButton() {
-        guard let safeRectangle = rectangle else { return }
-        let frame = CGRect(x: 17.0, y: 160.0, width: scalingLenghtToViewWidth(lenght: 270.0), height: scalingLenghtToViewHeight(lenght: 127.0))
-        safeRectangle.frame = frame
+        guard let safeBottom = rectangleBottom else { return }
+        guard let safeWidth = rectangleWidth else { return }
+        guard let safeLeading = rectangleLeading else { return }
+        guard let safeHeight = rectangleHeight else { return }
+        
+        safeBottom.constant = scalingLenghtToViewHeight(lenght: 13)
+        safeWidth.constant = scalingLenghtToViewWidth(lenght: 270)
+        safeLeading.constant = scalingLenghtToViewWidth(lenght: 17)
+        safeHeight.constant = scalingLenghtToViewHeight(lenght: 127)
     }
     
     private func setLeftButton() {
-        guard let safeLeftButton = leftButton else { return }
-        let frame = CGRect(x: 17.0, y: 17.0, width: scalingLenghtToViewWidth(lenght: 127.0), height: scalingLenghtToViewHeight(lenght: 127.0))
-        safeLeftButton.frame = frame
+        guard let safeTop = leftButtonTop else { return }
+        guard let safeWidth = leftButtonWidth else { return }
+        guard let safeLeading = leftButtonLeading else { return }
+        guard let safeHeight = leftButtonHeight else { return }
+        
+        safeTop.constant = scalingLenghtToViewHeight(lenght: 17)
+        safeWidth.constant = scalingLenghtToViewWidth(lenght: 127)
+        safeLeading.constant = scalingLenghtToViewWidth(lenght: 17)
+        safeHeight.constant = scalingLenghtToViewHeight(lenght: 127)
     }
 
     private func setRightButton() {
-        guard let safeRightButton = leftButton else { return }
-        let frame = CGRect(x: 160.0, y: 17.0, width: scalingLenghtToViewWidth(lenght: 127.0), height: scalingLenghtToViewHeight(lenght: 127.0))
-        safeRightButton.frame = frame
+        guard let safeTop = rightButtonTop else { return }
+        guard let safeWidth = rightButtonWidth else { return }
+        guard let safeTrail = rightButtonTrailing else { return }
+        guard let safeHeight = rightButtonHeight else { return }
+        
+        safeTop.constant = scalingLenghtToViewHeight(lenght: 17)
+        safeWidth.constant = scalingLenghtToViewWidth(lenght: 127)
+        safeTrail.constant = scalingLenghtToViewWidth(lenght: 13)
+        safeHeight.constant = scalingLenghtToViewHeight(lenght: 127)
     }
     
     private func setAndAddViews() {
@@ -136,8 +165,10 @@ class PhotosView2: UIView {
     private func setButtonsStyle() {
         for button in buttons {
             guard let safeButton = button else { return }
+            guard let label = safeButton.titleLabel else { return }
             
             safeButton.setTitle("+", for: [])
+            label.font = label.font.withSize(77)
             safeButton.setTitleColor(#colorLiteral(red: 0.323646307, green: 0.5646677017, blue: 0.7364179492, alpha: 1), for: [])
             safeButton.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         }

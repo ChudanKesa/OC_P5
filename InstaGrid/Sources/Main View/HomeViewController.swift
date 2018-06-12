@@ -73,6 +73,8 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     // MARK: - Outlets & actions
     
     @IBOutlet weak var photosViewsContainer: UIView!
+    @IBOutlet weak var containerWidth: NSLayoutConstraint!
+    
     
     @IBOutlet weak var instagridTitle: UITextView!
     @IBOutlet weak var instructionText: UITextView!
@@ -86,6 +88,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         removeSubviewsFromPhotosViewsContainer()
         setViewFrame(of: photosView1)
         photosViewsContainer.addSubview(photosView1)
+        photosView1.setSizesAndPositionsOfElements()
         currentView = .first
         selectedSign.frame = firstLayoutButton.frame
     }
@@ -94,6 +97,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         removeSubviewsFromPhotosViewsContainer()
         setViewFrame(of: photosView2)
         photosViewsContainer.addSubview(photosView2)
+        photosView2.setSizesAndPositionsOfElements()
         currentView = .second
         selectedSign.frame = secondLayoutButton.frame
     }
@@ -102,6 +106,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         removeSubviewsFromPhotosViewsContainer()
         setViewFrame(of: photosView3)
         photosViewsContainer.addSubview(photosView3)
+        photosView3.setSizesAndPositionsOfElements()
         currentView = .third
         selectedSign.frame = thirdLayoutButton.frame
     }
@@ -114,6 +119,8 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         photosViewsContainer.addGestureRecognizer(panGestureRecognizer)
         picker.delegate = self
         addNotificationObserversToViewControler()
+        
+        containerWidth!.constant = self.view.frame.width * 300.0 / 414.0
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -122,15 +129,12 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         setFontSize(of: instagridTitle)
         setFontSize(of: instructionText)
         
-        var alreadySet = false
-        guard let viewControlerView = self.view else { return }
-        let subviews = viewControlerView.subviews
-        for subview in subviews.indices {
-            if subviews[subview] == firstLayoutButtonView { alreadySet = true }
-        }
-        if !alreadySet { setButtonsViews() }
+        checkIfButtonsAreSet()
+        
+        leftButtonTouched(UIButton())
+        
+        hideButtons()
     }
-    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -146,7 +150,6 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     
     // MARK: - Notifications
-    
     private func addNotificationObserversToViewControler() {
         NotificationCenter.default.addObserver(self, selector: #selector(putPictureInRectangle), name: rectangleNotificationName, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(putPictureInRightButton), name: rightButtonNotificationName, object: nil)
@@ -389,6 +392,30 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     // MARK: - Configuration
+    private func checkIfButtonsAreSet() {
+        var alreadySet = false
+        guard let viewControlerView = self.view else { return }
+        let subviews = viewControlerView.subviews
+        for subview in subviews.indices {
+            if subviews[subview] == firstLayoutButtonView { alreadySet = true }
+        }
+        if !alreadySet { setButtonsViews() }
+    }
+    
+    private func hideButtons() {
+        guard let safeFirst = firstLayoutButton else { return }
+        guard let safeSecond = secondLayoutButton else { return }
+        guard let safeThird = thirdLayoutButton else { return }
+        
+        safeFirst.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
+        safeSecond.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
+        safeThird.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
+        
+        safeFirst.setTitle("", for: [])
+        safeSecond.setTitle("", for: [])
+        safeThird.setTitle("", for: [])
+    }
+    
     private func removeSubviewsFromPhotosViewsContainer() {
         guard let safeContainer = photosViewsContainer else { return }
         if safeContainer.subviews.count > 0 {

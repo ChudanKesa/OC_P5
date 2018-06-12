@@ -54,34 +54,6 @@
                                     <action selector="centerButtonTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vLI-ik-Xgr"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IhD-rc-Sov">
-                                <rect key="frame" x="47.5" y="555" width="80" height="80"/>
-                                <color key="backgroundColor" red="0.78426395940000004" green="0.051315798660000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="80" identifier="idButtonWidth" id="A1W-42-5ET"/>
-                                    <constraint firstAttribute="width" secondItem="IhD-rc-Sov" secondAttribute="height" multiplier="1:1" id="b4w-oA-TeC"/>
-                                    <constraint firstAttribute="width" constant="80" identifier="idButtonWidth" id="lrN-AB-lRl"/>
-                                    <constraint firstAttribute="width" secondItem="IhD-rc-Sov" secondAttribute="height" multiplier="1:1" id="sOM-cG-g4v"/>
-                                </constraints>
-                                <state key="normal" title="Button"/>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="A1W-42-5ET"/>
-                                        <exclude reference="sOM-cG-g4v"/>
-                                    </mask>
-                                </variation>
-                                <variation key="heightClass=compact">
-                                    <mask key="constraints">
-                                        <include reference="A1W-42-5ET"/>
-                                        <exclude reference="b4w-oA-TeC"/>
-                                        <exclude reference="lrN-AB-lRl"/>
-                                        <include reference="sOM-cG-g4v"/>
-                                    </mask>
-                                </variation>
-                                <connections>
-                                    <action selector="leftButtonTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zaM-XC-oKU"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EV4-BH-BOC">
                                 <rect key="frame" x="247.5" y="555" width="80" height="80"/>
                                 <color key="backgroundColor" red="0.78426395940000004" green="0.051315798660000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -111,7 +83,7 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="top" text="Instagrid" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="2Ae-aT-4Zk">
-                                <rect key="frame" x="128.5" y="35" width="119" height="39"/>
+                                <rect key="frame" x="128" y="35" width="119" height="39"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="2Ae-aT-4Zk" secondAttribute="height" multiplier="119:39" id="5b2-GD-NJr"/>
                                     <constraint firstAttribute="height" constant="39" identifier="idInstaTitleHeight" id="7bU-EX-M3d"/>
@@ -170,6 +142,34 @@ Swipe up to share</string>
                                     <constraint firstAttribute="width" constant="300" id="BBE-b8-9HT"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IhD-rc-Sov">
+                                <rect key="frame" x="47.5" y="555" width="80" height="80"/>
+                                <color key="backgroundColor" red="0.78426395940000004" green="0.051315798660000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" identifier="idButtonWidth" id="A1W-42-5ET"/>
+                                    <constraint firstAttribute="width" secondItem="IhD-rc-Sov" secondAttribute="height" multiplier="1:1" id="b4w-oA-TeC"/>
+                                    <constraint firstAttribute="width" constant="80" identifier="idButtonWidth" id="lrN-AB-lRl"/>
+                                    <constraint firstAttribute="width" secondItem="IhD-rc-Sov" secondAttribute="height" multiplier="1:1" id="sOM-cG-g4v"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="A1W-42-5ET"/>
+                                        <exclude reference="sOM-cG-g4v"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="A1W-42-5ET"/>
+                                        <exclude reference="b4w-oA-TeC"/>
+                                        <exclude reference="lrN-AB-lRl"/>
+                                        <include reference="sOM-cG-g4v"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="leftButtonTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zaM-XC-oKU"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.71299129724502563" green="0.84162932634353638" blue="0.90019363164901733" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -177,30 +177,50 @@ Swipe up to share</string>
                                 <variation key="heightClass=compact" constant="11"/>
                             </constraint>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="EV4-BH-BOC" secondAttribute="bottom" constant="32" id="5Sf-wX-xmp"/>
+                            <constraint firstItem="oo4-y3-ulS" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="9Mm-0y-sHs"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="rcH-TY-n49" secondAttribute="trailing" constant="37" id="E18-Eq-klb"/>
                             <constraint firstItem="rcH-TY-n49" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="Fuv-GP-whI"/>
+                            <constraint firstItem="EV4-BH-BOC" firstAttribute="bottom" secondItem="C0m-CF-I6b" secondAttribute="bottom" id="IK1-A4-ZdO"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="IhD-rc-Sov" secondAttribute="bottom" constant="32" id="Lv4-fE-s7D"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="EV4-BH-BOC" secondAttribute="trailing" constant="37" id="MlE-wP-Hoh"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="rcH-TY-n49" secondAttribute="bottom" constant="32" id="QcE-cM-2B8"/>
+                            <constraint firstItem="C0m-CF-I6b" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="RLD-z9-lOb"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="C0m-CF-I6b" secondAttribute="bottom" constant="20" id="TLh-Aa-RS8"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="IhD-rc-Sov" secondAttribute="trailing" constant="37" id="UAr-eh-0vd"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="IhD-rc-Sov" secondAttribute="trailing" constant="37" id="Zom-jy-7Fn"/>
                             <constraint firstItem="EV4-BH-BOC" firstAttribute="leading" secondItem="rcH-TY-n49" secondAttribute="trailing" constant="20" id="aS4-GM-rhb"/>
                             <constraint firstItem="rcH-TY-n49" firstAttribute="leading" secondItem="IhD-rc-Sov" secondAttribute="trailing" constant="20" id="aTk-3S-iXD"/>
                             <constraint firstItem="2Ae-aT-4Zk" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="aih-Z0-fl9"/>
                             <constraint firstItem="oo4-y3-ulS" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="dJ4-fD-6qS"/>
                             <constraint firstItem="oo4-y3-ulS" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="fy6-DV-pCG"/>
+                            <constraint firstItem="rcH-TY-n49" firstAttribute="centerY" secondItem="C0m-CF-I6b" secondAttribute="centerY" id="g0m-xO-N3K"/>
                             <constraint firstItem="2Ae-aT-4Zk" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="15" id="i3G-4O-JhX"/>
                             <constraint firstItem="C0m-CF-I6b" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="kWD-ci-bkh"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="EV4-BH-BOC" secondAttribute="trailing" constant="37" id="l3U-TT-9Ie"/>
                             <constraint firstItem="C0m-CF-I6b" firstAttribute="top" secondItem="oo4-y3-ulS" secondAttribute="bottom" constant="8.5" id="m81-6l-eCf"/>
+                            <constraint firstItem="IhD-rc-Sov" firstAttribute="top" secondItem="C0m-CF-I6b" secondAttribute="top" id="mpS-NW-XYY"/>
+                            <constraint firstItem="C0m-CF-I6b" firstAttribute="leading" secondItem="oo4-y3-ulS" secondAttribute="trailing" constant="9" id="oIR-gx-OYv"/>
                             <constraint firstItem="C0m-CF-I6b" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="wJ6-6i-x8J"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="rcH-TY-n49" secondAttribute="trailing" constant="37" id="y15-Zs-xuK"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="E18-Eq-klb"/>
+                                <exclude reference="MlE-wP-Hoh"/>
+                                <exclude reference="TLh-Aa-RS8"/>
                                 <exclude reference="UAr-eh-0vd"/>
+                                <exclude reference="Zom-jy-7Fn"/>
                                 <exclude reference="l3U-TT-9Ie"/>
-                                <exclude reference="2Qq-t7-qxe"/>
+                                <exclude reference="y15-Zs-xuK"/>
+                                <exclude reference="9Mm-0y-sHs"/>
                                 <exclude reference="dJ4-fD-6qS"/>
+                                <exclude reference="RLD-z9-lOb"/>
+                                <exclude reference="oIR-gx-OYv"/>
+                                <exclude reference="2Qq-t7-qxe"/>
+                                <exclude reference="mpS-NW-XYY"/>
+                                <exclude reference="g0m-xO-N3K"/>
+                                <exclude reference="IK1-A4-ZdO"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=compact">
@@ -208,19 +228,33 @@ Swipe up to share</string>
                                 <exclude reference="5Sf-wX-xmp"/>
                                 <include reference="E18-Eq-klb"/>
                                 <exclude reference="Lv4-fE-s7D"/>
+                                <include reference="MlE-wP-Hoh"/>
                                 <exclude reference="QcE-cM-2B8"/>
+                                <include reference="TLh-Aa-RS8"/>
                                 <include reference="UAr-eh-0vd"/>
-                                <include reference="l3U-TT-9Ie"/>
+                                <include reference="Zom-jy-7Fn"/>
+                                <exclude reference="l3U-TT-9Ie"/>
+                                <include reference="y15-Zs-xuK"/>
+                                <include reference="9Mm-0y-sHs"/>
+                                <exclude reference="dJ4-fD-6qS"/>
+                                <exclude reference="fy6-DV-pCG"/>
+                                <include reference="RLD-z9-lOb"/>
+                                <exclude reference="m81-6l-eCf"/>
+                                <include reference="oIR-gx-OYv"/>
+                                <exclude reference="wJ6-6i-x8J"/>
                                 <include reference="2Qq-t7-qxe"/>
                                 <exclude reference="i3G-4O-JhX"/>
-                                <include reference="dJ4-fD-6qS"/>
+                                <include reference="mpS-NW-XYY"/>
                                 <exclude reference="Fuv-GP-whI"/>
                                 <exclude reference="aTk-3S-iXD"/>
+                                <include reference="g0m-xO-N3K"/>
+                                <include reference="IK1-A4-ZdO"/>
                                 <exclude reference="aS4-GM-rhb"/>
                             </mask>
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="containerWidth" destination="BBE-b8-9HT" id="z1b-pc-gwf"/>
                         <outlet property="firstLayoutButton" destination="IhD-rc-Sov" id="iNn-k8-2Uy"/>
                         <outlet property="instagridTitle" destination="2Ae-aT-4Zk" id="zFO-gI-A45"/>
                         <outlet property="instructionText" destination="oo4-y3-ulS" id="ZTJ-Yp-ehB"/>
