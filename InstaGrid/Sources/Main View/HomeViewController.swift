@@ -559,15 +559,13 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         let array = [firstButton, secondButton, thirdButton]
         for button in array {
             for constraint in button.constraints {
-                guard let identifier = constraint.identifier else { return }
-                if identifier == "idButtonWidth" {
+                if constraint.identifier == "idButtonWidth" {
                     constraint.constant = layoutButtonWidth
                 }
             }
         }
     }
     
-
     
     // Puts the layout images in views on top of them. Adds the views to hierarchy, so is only to be called once.
     private func setButtonsViews() {
