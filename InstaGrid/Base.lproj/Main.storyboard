@@ -91,7 +91,7 @@ Swipe up to share</string>
                                 <color key="backgroundColor" red="0.78426395940000004" green="0.051315798660000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="IhD-rc-Sov" secondAttribute="height" multiplier="1:1" id="21E-Z9-tAh"/>
-                                    <constraint firstAttribute="width" constant="80" identifier="idButtonWidth" id="BqP-UP-2VS"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" priority="750" constant="80" identifier="idButtonWidth" id="BqP-UP-2VS"/>
                                 </constraints>
                                 <state key="normal" title="Button"/>
                                 <connections>
@@ -103,7 +103,7 @@ Swipe up to share</string>
                                 <color key="backgroundColor" red="0.78426395939086291" green="0.051315798664904863" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="rcH-TY-n49" secondAttribute="height" multiplier="1:1" id="3AL-Tb-VDU"/>
-                                    <constraint firstAttribute="width" constant="80" identifier="idButtonWidth" id="Aaj-aT-t0c"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" priority="750" constant="80" identifier="idButtonWidth" id="Aaj-aT-t0c"/>
                                 </constraints>
                                 <state key="normal" title="Button"/>
                                 <connections>
@@ -114,7 +114,7 @@ Swipe up to share</string>
                                 <rect key="frame" x="257.5" y="535" width="80" height="80"/>
                                 <color key="backgroundColor" red="0.78426395940000004" green="0.051315798660000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="80" identifier="idButtonWidth" id="SuP-JM-ozc"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" priority="750" constant="80" identifier="idButtonWidth" id="SuP-JM-ozc"/>
                                     <constraint firstAttribute="width" secondItem="EV4-BH-BOC" secondAttribute="height" multiplier="1:1" id="vao-Y5-gfv"/>
                                 </constraints>
                                 <state key="normal" title="Button"/>
@@ -129,8 +129,18 @@ Swipe up to share</string>
                             <constraint firstItem="2Ae-aT-4Zk" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="12" id="2Qq-t7-qxe">
                                 <variation key="heightClass=compact" constant="11"/>
                             </constraint>
+                            <constraint firstItem="rcH-TY-n49" firstAttribute="leading" secondItem="C0m-CF-I6b" secondAttribute="trailing" constant="41" id="7Wr-ac-A5d"/>
                             <constraint firstItem="rcH-TY-n49" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="8n7-MR-qSi"/>
                             <constraint firstItem="oo4-y3-ulS" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="9Mm-0y-sHs"/>
+                            <constraint firstAttribute="trailing" secondItem="EV4-BH-BOC" secondAttribute="trailing" priority="750" id="FR9-mQ-uLi">
+                                <variation key="heightClass=compact" constant="62"/>
+                            </constraint>
+                            <constraint firstAttribute="trailing" secondItem="rcH-TY-n49" secondAttribute="trailing" priority="750" id="FnV-Sa-Ydk">
+                                <variation key="heightClass=compact" constant="62"/>
+                            </constraint>
+                            <constraint firstItem="rcH-TY-n49" firstAttribute="top" secondItem="IhD-rc-Sov" secondAttribute="bottom" priority="250" constant="30" id="Hzj-lm-QiD"/>
+                            <constraint firstItem="rcH-TY-n49" firstAttribute="top" secondItem="IhD-rc-Sov" secondAttribute="bottom" constant="30" id="LiB-SJ-9Cx"/>
+                            <constraint firstItem="EV4-BH-BOC" firstAttribute="top" secondItem="rcH-TY-n49" secondAttribute="bottom" constant="30" id="NCo-jQ-VhJ"/>
                             <constraint firstItem="IhD-rc-Sov" firstAttribute="top" secondItem="C0m-CF-I6b" secondAttribute="top" id="QVy-Al-xZG"/>
                             <constraint firstItem="C0m-CF-I6b" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="RLD-z9-lOb"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="C0m-CF-I6b" secondAttribute="bottom" constant="20" id="TLh-Aa-RS8"/>
@@ -138,16 +148,25 @@ Swipe up to share</string>
                                 <variation key="heightClass=compact" constant="41"/>
                             </constraint>
                             <constraint firstItem="EV4-BH-BOC" firstAttribute="top" secondItem="C0m-CF-I6b" secondAttribute="bottom" constant="41.5" id="WkF-tD-CHC"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="IhD-rc-Sov" secondAttribute="trailing" constant="20" symbolic="YES" id="Xe3-rr-ViD"/>
+                            <constraint firstAttribute="trailing" secondItem="IhD-rc-Sov" secondAttribute="trailing" priority="750" id="XfR-p7-ITj">
+                                <variation key="heightClass=compact" constant="62"/>
+                            </constraint>
+                            <constraint firstItem="EV4-BH-BOC" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="ZPQ-Mx-4vN">
+                                <variation key="heightClass=compact" constant="0.0"/>
+                            </constraint>
                             <constraint firstItem="IhD-rc-Sov" firstAttribute="top" secondItem="C0m-CF-I6b" secondAttribute="bottom" constant="41.5" id="ZQv-lY-6U9"/>
                             <constraint firstItem="EV4-BH-BOC" firstAttribute="trailing" secondItem="C0m-CF-I6b" secondAttribute="trailing" id="ZVU-iA-A1n"/>
                             <constraint firstItem="2Ae-aT-4Zk" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="aih-Z0-fl9"/>
-                            <constraint firstItem="IhD-rc-Sov" firstAttribute="leading" secondItem="C0m-CF-I6b" secondAttribute="trailing" constant="16.5" id="bwK-Qr-Gg5">
-                                <variation key="heightClass=compact" constant="41"/>
+                            <constraint firstItem="IhD-rc-Sov" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="C0m-CF-I6b" secondAttribute="trailing" constant="16.5" id="bwK-Qr-Gg5">
+                                <variation key="heightClass=compact" constant="8" symbolic="YES"/>
                             </constraint>
+                            <constraint firstItem="IhD-rc-Sov" firstAttribute="leading" secondItem="C0m-CF-I6b" secondAttribute="trailing" constant="41" id="czc-cd-O1z"/>
                             <constraint firstItem="oo4-y3-ulS" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="dJ4-fD-6qS"/>
                             <constraint firstItem="oo4-y3-ulS" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="fy6-DV-pCG"/>
-                            <constraint firstItem="rcH-TY-n49" firstAttribute="leading" secondItem="C0m-CF-I6b" secondAttribute="trailing" constant="16.5" id="gch-Wh-FDH">
-                                <variation key="heightClass=compact" constant="41"/>
+                            <constraint firstItem="EV4-BH-BOC" firstAttribute="top" secondItem="rcH-TY-n49" secondAttribute="bottom" priority="250" constant="30" id="gb9-Lg-6GN"/>
+                            <constraint firstItem="rcH-TY-n49" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="C0m-CF-I6b" secondAttribute="trailing" constant="16.5" id="gch-Wh-FDH">
+                                <variation key="heightClass=compact" constant="8" symbolic="YES"/>
                             </constraint>
                             <constraint firstItem="2Ae-aT-4Zk" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="15" id="i3G-4O-JhX"/>
                             <constraint firstItem="C0m-CF-I6b" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="kWD-ci-bkh"/>
@@ -168,10 +187,19 @@ Swipe up to share</string>
                                 <exclude reference="oIR-gx-OYv"/>
                                 <exclude reference="2Qq-t7-qxe"/>
                                 <exclude reference="QVy-Al-xZG"/>
+                                <exclude reference="XfR-p7-ITj"/>
                                 <exclude reference="bwK-Qr-Gg5"/>
+                                <exclude reference="czc-cd-O1z"/>
+                                <exclude reference="7Wr-ac-A5d"/>
+                                <exclude reference="FnV-Sa-Ydk"/>
+                                <exclude reference="Hzj-lm-QiD"/>
+                                <exclude reference="LiB-SJ-9Cx"/>
                                 <exclude reference="gch-Wh-FDH"/>
                                 <exclude reference="ylr-oR-tBo"/>
+                                <exclude reference="FR9-mQ-uLi"/>
+                                <exclude reference="NCo-jQ-VhJ"/>
                                 <exclude reference="WMq-MX-t0b"/>
+                                <exclude reference="gb9-Lg-6GN"/>
                                 <exclude reference="mt3-LU-AdH"/>
                             </mask>
                         </variation>
@@ -189,15 +217,26 @@ Swipe up to share</string>
                                 <exclude reference="i3G-4O-JhX"/>
                                 <exclude reference="2NQ-Ga-45q"/>
                                 <include reference="QVy-Al-xZG"/>
+                                <exclude reference="Xe3-rr-ViD"/>
+                                <include reference="XfR-p7-ITj"/>
                                 <exclude reference="ZQv-lY-6U9"/>
-                                <include reference="bwK-Qr-Gg5"/>
+                                <exclude reference="bwK-Qr-Gg5"/>
+                                <include reference="czc-cd-O1z"/>
+                                <include reference="7Wr-ac-A5d"/>
                                 <exclude reference="8n7-MR-qSi"/>
-                                <include reference="gch-Wh-FDH"/>
+                                <include reference="FnV-Sa-Ydk"/>
+                                <include reference="Hzj-lm-QiD"/>
+                                <exclude reference="LiB-SJ-9Cx"/>
+                                <exclude reference="gch-Wh-FDH"/>
                                 <exclude reference="usb-HF-k0X"/>
                                 <include reference="ylr-oR-tBo"/>
+                                <include reference="FR9-mQ-uLi"/>
+                                <exclude reference="NCo-jQ-VhJ"/>
                                 <include reference="WMq-MX-t0b"/>
                                 <exclude reference="WkF-tD-CHC"/>
+                                <exclude reference="ZPQ-Mx-4vN"/>
                                 <exclude reference="ZVU-iA-A1n"/>
+                                <include reference="gb9-Lg-6GN"/>
                                 <include reference="mt3-LU-AdH"/>
                             </mask>
                         </variation>

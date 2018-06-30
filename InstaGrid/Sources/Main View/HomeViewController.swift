@@ -82,12 +82,18 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBOutlet weak var secondLayoutButton: UIButton!
     @IBOutlet weak var firstLayoutButton: UIButton!
     
+    lazy var firstLayoutElementsSet = false
+    lazy var secondLayoutElementsSet = false
+    lazy var thirdLayoutElementSet = false
     
     @IBAction func leftButtonTouched(_ sender: UIButton) {
         removeSubviewsFromPhotosViewsContainer()
         setViewFrame(of: photosView1)
         photosViewsContainer.addSubview(photosView1)
-        photosView1.setSizesAndPositionsOfElements()
+        if !firstLayoutElementsSet {
+            photosView1.setSizesAndPositionsOfElements()
+            firstLayoutElementsSet = true
+        }
         currentView = .first
         selectedSign.frame = firstLayoutButton.frame
     }
@@ -96,7 +102,10 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         removeSubviewsFromPhotosViewsContainer()
         setViewFrame(of: photosView2)
         photosViewsContainer.addSubview(photosView2)
-        photosView2.setSizesAndPositionsOfElements()
+        if !secondLayoutElementsSet {
+            secondLayoutElementsSet = true
+            photosView2.setSizesAndPositionsOfElements()
+        }
         currentView = .second
         selectedSign.frame = secondLayoutButton.frame
     }
@@ -105,7 +114,10 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         removeSubviewsFromPhotosViewsContainer()
         setViewFrame(of: photosView3)
         photosViewsContainer.addSubview(photosView3)
-        photosView3.setSizesAndPositionsOfElements()
+        if !thirdLayoutElementSet {
+            thirdLayoutElementSet = true
+            photosView3.setSizesAndPositionsOfElements()
+        }
         currentView = .third
         selectedSign.frame = thirdLayoutButton.frame
     }
@@ -119,7 +131,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         picker.delegate = self
         addNotificationObserversToViewControler()
         
-        containerWidth!.constant = self.view.frame.width * 300.0 / 414.0
+        containerWidth.constant = self.view.frame.width * 300.0 / 414.0
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -131,6 +143,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         checkIfButtonsAreSet()
         
         setViewOriginPosition()
+        print(viewOriginX, viewOriginY)
         
         leftButtonTouched(UIButton())
         
@@ -246,6 +259,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         adaptInstructionTextToPhoneOrientation()
         adaptButtonsViewsToPhoneRotation()
+        setViewOriginPosition()
     }
     
     private func adaptInstructionTextToPhoneOrientation() {

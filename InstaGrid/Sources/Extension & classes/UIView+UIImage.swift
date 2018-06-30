@@ -10,10 +10,12 @@ import UIKit
 
 extension UIView {
     func toUIImage() -> UIImage? {
+        defer {
+            UIGraphicsEndImageContext()
+        }
         UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.isOpaque, 0.0)
         self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)
         guard let image = UIGraphicsGetImageFromCurrentImageContext() else { return nil }
-        UIGraphicsEndImageContext()
         return image
     }
 }
