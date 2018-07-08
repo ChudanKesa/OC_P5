@@ -36,7 +36,6 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     private var photosViewWidth: CGFloat?
     private var photosViewHeight: CGFloat?
     private var instagridTitleWidth: CGFloat?
-    private var instagridTitleHeight: CGFloat?
     private var instructionTextWidth: CGFloat?
     private var instructionTextHeight: CGFloat?
     private var buttonWidth: CGFloat?
@@ -95,7 +94,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             firstLayoutElementsSet = true
         }
         currentView = .first
-        selectedSign.frame = firstLayoutButton.frame
+        selectedSignSetting(button: firstLayoutButton)
     }
     
     @IBAction func centerButtonTouched(_ sender: UIButton) {
@@ -107,7 +106,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             photosView2.setSizesAndPositionsOfElements()
         }
         currentView = .second
-        selectedSign.frame = secondLayoutButton.frame
+        selectedSignSetting(button: secondLayoutButton)
     }
 
     @IBAction func rightButtonTouched(_ sender: UIButton) {
@@ -119,7 +118,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             photosView3.setSizesAndPositionsOfElements()
         }
         currentView = .third
-        selectedSign.frame = thirdLayoutButton.frame
+        selectedSignSetting(button: thirdLayoutButton)
     }
     
     // MARK: - View life cycle
@@ -143,7 +142,6 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         checkIfButtonsAreSet()
         
         setViewOriginPosition()
-        print(viewOriginX, viewOriginY)
         
         leftButtonTouched(UIButton())
         
@@ -258,7 +256,6 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         self.isPortrait = UIDeviceOrientationIsPortrait(currentDeviceOrientation);
         
         adaptInstructionTextToPhoneOrientation()
-        adaptButtonsViewsToPhoneRotation()
         setViewOriginPosition()
     }
     
@@ -428,7 +425,7 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         for subview in subviews.indices {
             if subviews[subview] == firstLayoutButtonView { alreadySet = true }
         }
-        if !alreadySet { setButtonsViews() }
+        if !alreadySet { addLayoutButtonSubviews() }
     }
     
     private func hideButtons() {
@@ -483,13 +480,6 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         } else {
             fatalError("instructionText = nil")
         }
-        
-        if thirdLayoutButton != nil && secondLayoutButton != nil && firstLayoutButton != nil {
-            layoutButtonSizeSetting(accordingTo: controlerView)
-        } else {
-            fatalError("layout buttons = nil")
-        }
-        
     }
     
     private func photosViewSizeSetting(accordingTo constrolerView: UIView) {
@@ -498,24 +488,12 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     private func instagridTitleSizeSetting(accordingTo controlerView: UIView) {
-        instagridTitleHeight = controlerView.frame.height*44.0/736.0
         instagridTitleWidth = controlerView.frame.width*119.0/414.0
     }
     
     private func instructionTextSizeSetting(accordingTo controlerView: UIView) {
         instructionTextHeight = controlerView.frame.height*90.0/736.0
         instructionTextWidth = controlerView.frame.width*161.0/414.0
-    }
-    
-    private func layoutButtonSizeSetting(accordingTo controlerView: UIView) {
-        buttonHeight = controlerView.frame.height*80.0/736.0
-        buttonWidth = controlerView.frame.width*80.0/414.0
-        
-        buttonHeight = controlerView.frame.height*80.0/736.0
-        buttonWidth = controlerView.frame.width*80.0/414.0
-        
-        buttonHeight = controlerView.frame.height*80.0/736.0
-        buttonWidth = controlerView.frame.width*80.0/414.0
     }
 
     
@@ -525,7 +503,6 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         setSizeOfPhotosView()
         setSizeOfInstagridTitle()
         setSizeofInstructionText()
-        setSizeOfLayoutButtons()
     }
     
     private func setSizeOfPhotosView() {
@@ -542,14 +519,10 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     private func setSizeOfInstagridTitle() {
         guard let gridTitle = instagridTitle else { return }
         guard let gridTitleWidth = instagridTitleWidth else { return }
-        guard let gridTitleHeight = instagridTitleHeight else { return }
         for constraint in gridTitle.constraints {
             guard let identifier = constraint.identifier else { return }
             if identifier == "idInstaTitleWidth" {
                 constraint.constant = gridTitleWidth
-            }
-            if identifier == "idInstaTitleHeight" {
-                constraint.constant = gridTitleHeight
             }
         }
     }
@@ -565,41 +538,52 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         }
     }
     
-    private func setSizeOfLayoutButtons() {
-        guard let firstButton = firstLayoutButton else { return }
-        guard let secondButton = secondLayoutButton else { return }
-        guard let thirdButton = thirdLayoutButton else { return }
-        guard let layoutButtonWidth = buttonWidth else { return }
-        let array = [firstButton, secondButton, thirdButton]
-        for button in array {
-            for constraint in button.constraints {
-                if constraint.identifier == "idButtonWidth" {
-                    constraint.constant = layoutButtonWidth
-                }
-            }
-        }
-    }
-    
     
     // Puts the layout images in views on top of them. Adds the views to hierarchy, so is only to be called once.
-    private func setButtonsViews() {
-        addLayoutButtonSubviews()
-        selectedSignSetting()
-        layoutButtonsViewsFrameSetting()
-        layoutButtonsViewsSetting()
-    }
     
     private func addLayoutButtonSubviews() {
-        guard let view = self.view else { return }
-        view.addSubview(firstLayoutButtonView)
-        view.addSubview(secondLayoutButtonView)
-        view.addSubview(thirdLayoutButtonView)
+        firstLayoutAdding()
+        secondLayoutAdding()
+        thirdLayoutAdding()
     }
     
-    private func selectedSignSetting() {
-        guard let view = self.view else { return }
-        view.addSubview(selectedSign)
-        selectedSign.frame = firstLayoutButton.frame
+        private func firstLayoutAdding() {
+            firstLayoutButtonSetting()
+            firstLayoutButton.addSubview(firstLayoutButtonView)
+            firstLayoutButtonView.translatesAutoresizingMaskIntoConstraints = false
+            firstLayoutButtonView.topAnchor.constraint(equalTo: firstLayoutButton.topAnchor, constant: 0.0).isActive = true
+            firstLayoutButtonView.leftAnchor.constraint(equalTo: firstLayoutButton.leftAnchor, constant: 0.0).isActive = true
+            firstLayoutButtonView.bottomAnchor.constraint(equalTo: firstLayoutButton.bottomAnchor, constant: 0.0).isActive = true
+            firstLayoutButtonView.rightAnchor.constraint(equalTo: firstLayoutButton.rightAnchor, constant: 0.0).isActive = true
+        }
+    
+        private func secondLayoutAdding() {
+            secondLayoutButtonSetting()
+            secondLayoutButton.addSubview(secondLayoutButtonView)
+            secondLayoutButtonView.translatesAutoresizingMaskIntoConstraints = false
+            secondLayoutButtonView.topAnchor.constraint(equalTo: secondLayoutButton.topAnchor, constant: 0.0).isActive = true
+            secondLayoutButtonView.leftAnchor.constraint(equalTo: secondLayoutButton.leftAnchor, constant: 0.0).isActive = true
+            secondLayoutButtonView.bottomAnchor.constraint(equalTo: secondLayoutButton.bottomAnchor, constant: 0.0).isActive = true
+            secondLayoutButtonView.rightAnchor.constraint(equalTo: secondLayoutButton.rightAnchor, constant: 0.0).isActive = true
+        }
+    
+        private func thirdLayoutAdding() {
+            thirdLayoutButtonSetting()
+            thirdLayoutButton.addSubview(thirdLayoutButtonView)
+            thirdLayoutButtonView.translatesAutoresizingMaskIntoConstraints = false
+            thirdLayoutButtonView.topAnchor.constraint(equalTo: thirdLayoutButton.topAnchor, constant: 0.0).isActive = true
+            thirdLayoutButtonView.leftAnchor.constraint(equalTo: thirdLayoutButton.leftAnchor, constant: 0.0).isActive = true
+            thirdLayoutButtonView.bottomAnchor.constraint(equalTo: thirdLayoutButton.bottomAnchor, constant: 0.0).isActive = true
+            thirdLayoutButtonView.rightAnchor.constraint(equalTo: thirdLayoutButton.rightAnchor, constant: 0.0).isActive = true
+        }
+    
+    private func selectedSignSetting(button: UIButton) {
+        button.addSubview(selectedSign)
+        selectedSign.translatesAutoresizingMaskIntoConstraints = false
+        selectedSign.topAnchor.constraint(equalTo: button.topAnchor, constant: 0.0).isActive = true
+        selectedSign.leftAnchor.constraint(equalTo: button.leftAnchor, constant: 0.0).isActive = true
+        selectedSign.bottomAnchor.constraint(equalTo: button.bottomAnchor, constant: 0.0).isActive = true
+        selectedSign.rightAnchor.constraint(equalTo: button.rightAnchor, constant: 0.0).isActive = true
         selectedSign.contentMode = .scaleAspectFill
         selectedSign.layer.masksToBounds = true
         selectedSign.clipsToBounds = true
@@ -608,18 +592,6 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         selectedSign.layer.zPosition = 2
     }
     
-    
-    private func layoutButtonsViewsFrameSetting() {
-        firstLayoutButtonView.frame = firstLayoutButton.frame
-        secondLayoutButtonView.frame = secondLayoutButton.frame
-        thirdLayoutButtonView.frame = thirdLayoutButton.frame
-    }
-    
-    private func layoutButtonsViewsSetting() {
-        firstLayoutButtonSetting()
-        secondLayoutButtonSetting()
-        thirdLayoutButtonSetting()
-    }
     
     private func firstLayoutButtonSetting() {
         firstLayoutButtonView.contentMode = .scaleAspectFill
@@ -678,29 +650,6 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         }
     }
     
-    // The views covering the layout buttons don't have constraints, this places them.
-    // -> to be used in deviceDidRotate()
-    private func adaptButtonsViewsToPhoneRotation() {
-        guard let firstButton = firstLayoutButton else { return }
-        guard let secondButton = secondLayoutButton else { return }
-        guard let thirdButton = thirdLayoutButton else { return }
-        firstLayoutButtonView.frame = firstButton.frame
-        secondLayoutButtonView.frame = secondButton.frame
-        thirdLayoutButtonView.frame = thirdButton.frame
-        
-        putSelectedSignOnSelectedLayoutButton()
-    }
-    
-    private func putSelectedSignOnSelectedLayoutButton() {
-        switch currentView {
-        case .first:
-            selectedSign.frame = firstLayoutButtonView.frame
-        case .second:
-            selectedSign.frame = secondLayoutButtonView.frame
-        case .third:
-            selectedSign.frame = thirdLayoutButtonView.frame
-        }
-    }
     
     
     // Makes the photosView's backround green if share upon release is enabled
